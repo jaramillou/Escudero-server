@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const port = process.env.port || 3000;
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -148,7 +149,7 @@ app.get('/enviar', (req, res) => {
 
 
 
-
+/*
 
 mongoose.connect('mongodb://localhost:27017/,mapas', {
     useNewUrlParser: true,
@@ -160,10 +161,10 @@ mongoose.connect('mongodb://localhost:27017/,mapas', {
 
     console.log('base de datos ONLINE');
 });
-
+*/
 
 //app.listen(3000, "0.0.0.0");
-app.listen(3000);
+app.listen(port, () => 'escuchando en el puerto ${  port }');
 
 hbs.registerPartials(__dirname + '/views/partials', function(err) {});
 
