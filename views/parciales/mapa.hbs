@@ -1,0 +1,56 @@
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+<div id='map' style='width: 100%; height: 100%;'></div>
+
+<script>
+
+var geojson = {
+'type': 'geojson',
+    'data': {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'LineString',
+             'coordinates': {{ coordinates }}
+        }
+    }
+}
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11',
+center: geojson.data.geometry.coordinates[0], // starting position [lng, lat]
+zoom: 9 // starting zoom
+});
+map.on('load', function() {
+map.addSource('route',geojson);
+map.addLayer({
+'id': 'route',
+'type': 'line',
+'source': 'route',
+'layout': {
+'line-join': 'round',
+'line-cap': 'round'
+},
+'paint': {
+'line-color': '#888',
+'line-width': 8
+}
+}); 
+var coordinates = geojson.data.geometry.coordinates
+
+        // Pass the first coordinates in the LineString to `lngLatBounds` &
+        // wrap each coordinate pair in `extend` to include them in the bounds
+        // result. A variation of this technique could be applied to zooming
+        // to the bounds of multiple Points or Polygon geomteries - it just
+        // requires wrapping all the coordinates with the extend method.
+        var bounds = coordinates.reduce(function(bounds, coord) {
+            return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+        map.fitBounds(bounds, {
+            padding: 150
+        });
+});
+</script>
