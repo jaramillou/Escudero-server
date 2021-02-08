@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <script src="/abrirUrlHeader.js"></script>
+    <link rel="stylesheet" href="assets/css/validacion.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+    <script>
+        function abrirUrlHeader(url) {
+            var token1 = localStorage.getItem('token');
+            if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+                let h = new Headers();
+                h.append('authorization', `${token1}`);
+                let req = new Request(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: h
+                });
+
+
+
+                fetch(req)
+                    .then(resp => resp.text())
+                    .then(data => {
+
+                        document.write(data);
+
+
+                    })
+                    .catch(err => {
+                        console.log("error en funcion abrirUrlHeader")
+                    })
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <form id='f1' action="./login" method="post">
+        <ul>
+
+            <li>
+                <label for="mail">Correo electrónico:</label >
+            <input type="email" id="email" name="email" required>
+        </li>
+        <li>
+            <label for="msg">Contraseña:</label>
+                <input type="password" id="passw" name="password" required>
+            </li>
+        </ul>
+        <input type="button" id="botonenviar" value="Enviar">
+    </form>
+    <a href="/nuevoUsuario">Nuevo usuario</a>
+    <script>
+        //este bloque guarda el token en localstorage y luego lo envía si fue creado para la petición.     
+        $(document).ready(function() {
+            $("#botonenviar").click(function() { // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+
+                $.post("./login", $("#f1").serialize(), function(res) {
+                    var token = res.token;
+                    Headers.apply
+                    alert(res.token)
+                    localStorage.setItem('token', res.token);
+                    let url = 'http://localhost:3000/muro';
+                    abrirUrlHeader(url)
+
+
+                });
+
+            })
+
+        });
+
+
+        /*
+         let token = localStorage.getItem('token');
+                let h = new Headers();
+                h.append('authorization', `${token}`);
+                alert(String(h));
+
+                let url = 'http://localhost:3000/0';
+                let req = new Request(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: h
+                });
+
+                fetch(req)
+                    .then(resp => resp.text())
+                    .then(data => {
+
+                        document.write(data);
+
+                    })
+                    .catch(err => {
+                        // console.error(err.message);
+                    })
+        */
+    </script>
+</body>
+
+</html>

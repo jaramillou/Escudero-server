@@ -1,0 +1,160 @@
+
+<html>
+<title></title>
+
+
+
+{{> head }}
+
+
+<script>
+    /*
+function abrirUrlHeader(url) {
+    var token1 = localStorage.getItem('token');
+    if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+        let h = new Headers();
+        h.append('authorization', `${token1}`);
+        let req = new Request(url, {
+            method: 'GET',
+            mode: 'cors',
+            headers: h
+        });
+
+
+
+        fetch(req)
+            .then(resp => resp.text())
+            .then(data => {
+
+                document.write(data);
+
+
+            })
+            .catch(err => {
+                console.log("error en funcion abrirUrlHeader")
+            })
+    }
+
+}
+*/
+
+
+</script>
+</head>
+<body>
+
+  <script> 
+  
+      
+       //if (localStorage.getItem('token', json.token) != null){
+        //abrirUrlHeader('muro/');
+</script>
+<form id ='formulario'action="/login" method="post">
+    <ul>
+        
+        <li>
+            <label for="mail">Correo electrónico:</label >
+            <input type="email" id="email" name="email" required>
+        </li>
+        <li>
+            <label for="msg">Contraseña:</label>
+            <input type="password" id="passw" name="password" required>
+        </li>
+    </ul>
+    <button type="button" onclick="myFunction()" id='botonOn'>on</button>
+</form>
+<a href="/nuevoUsuario">Nuevo usuario</a>
+<script>
+
+
+async function myFunction(){
+
+    const formu = document.getElementById('formulario');
+    console.log(formu.email.value)
+    usuarioEnvio=formu.email.value;  
+    
+    let datos = {
+        "email" : formu.email.value,
+        "password":  formu.password.value
+    }
+    let token = await postData('/login', datos)
+    
+    // Headers.apply
+    
+    //localStorage.setItem('token', res.token);
+    //let url = '/muro';
+    //abrirUrlHeader(url)
+
+  
+}
+  // Ejemplo implementando el metodo POST:                      //https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Utilizando_Fetch
+
+
+   /*       
+  //este bloque guarda el token en localstorage y luego lo envía si fue creado para la petición.     
+$(document).ready( function() {   
+    $("#botonenviar").click( function() {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+                                     
+            $.post("./login",$("#f1").serialize(),function(res){
+                c
+                Headers.apply
+                //alert(res.token)
+                localStorage.setItem('token', res.token);
+                let url = '/muro';
+                abrirUrlHeader(url)
+
+
+            });
+        
+    })
+        
+});
+*/
+
+
+
+
+var token2= localStorage.getItem('token');
+
+if(token2!=null)  {
+     window.onload = bypass('/muro');
+}
+
+async function postData(url = '', data = {}) {                      //pasar a head
+  // Opciones por defecto estan marcadas con un *
+  const response = await fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data)
+     // body data type must match "Content-Type" header
+  }).then(response => response.json())
+    .then(json => {
+        let token=json.token
+        if(token!=null){
+            localStorage.setItem('token', json.token);
+            let url = '/muro';
+            abrirUrlHeader(url)
+        }
+        
+        })
+    .catch(err => {return console.log(err)});
+  
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+

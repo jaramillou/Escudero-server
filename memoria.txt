@@ -1,0 +1,3 @@
+- añadir mongobd : noSQL nube
+- añadir modelo-vista-controlador
+-añadir diagrama de clases: sale en la udemy en CRUD

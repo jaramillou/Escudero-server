@@ -1,6 +1,7 @@
+
 <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
-<div id='map' style='width: 100%; height: 100%;'></div>
+<div id='map' style='width: 50%; height: 50%;'></div>
 
 <script>
 
@@ -16,12 +17,27 @@ var geojson = {
     }
 }
 
+
+
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A';
+
+
+
+var coordinates = geojson.data.geometry.coordinates
+var bounds = coordinates.reduce(function(bounds, coord) {
+            return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+
 var map = new mapboxgl.Map({
 container: 'map',
 style: 'mapbox://styles/mapbox/streets-v11',
 center: geojson.data.geometry.coordinates[0], // starting position [lng, lat]
-zoom: 9 // starting zoom
+//center: bounds.center,
+zoom: 15 // starting zoom
+
+ //   zoom: bounds.zoom
 });
 map.on('load', function() {
 map.addSource('route',geojson);
@@ -34,7 +50,7 @@ map.addLayer({
 'line-cap': 'round'
 },
 'paint': {
-'line-color': '#888',
+'line-color': 'RED',
 'line-width': 8
 }
 }); 
@@ -45,12 +61,29 @@ var coordinates = geojson.data.geometry.coordinates
         // result. A variation of this technique could be applied to zooming
         // to the bounds of multiple Points or Polygon geomteries - it just
         // requires wrapping all the coordinates with the extend method.
-        var bounds = coordinates.reduce(function(bounds, coord) {
-            return bounds.extend(coord);
-        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+        
+       // var bounds = coordinates.reduce(function(bounds, coord) {
+       //     return bounds.extend(coord);
+      //  }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
 
-        map.fitBounds(bounds, {
-            padding: 150
-        });
+
+      //  map.fitBounds(bounds, {
+      //      padding: 150, animate: true, duration: 20000
+    
+      //  });
+        
 });
+
 </script>
+<p>hora y fecha: </p>
+<p>tiempo navegado: </p>
+<p>velocidad máxima: {{ velMax}} </p>
+<p>Tiempo en planeo: </p>
+<p>porcentaje de planeo: </p>
+<p>comentarios: </p><br>
+
+<p>Usuario que han navegado en este spot hoy</p>
+
+
+
+

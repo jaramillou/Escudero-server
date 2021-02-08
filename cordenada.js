@@ -1,8 +1,8 @@
 class Cordenadas {
 
-    constructor(cordenada) {
-        this.type = cordenada.type;
-        this.coordinates = cordenada.coordinates;
+    constructor() {
+        // this.type = cordenada.type;
+        //this.coordinates = cordenada.coordinates;
     }
 
 
@@ -15,24 +15,53 @@ class Cordenadas {
     set setCordenadas(cordenada) {
         this.type = cordenada.type;
         this.coordinates = JSON.stringify(cordenada.coordinates);
+        console.log("coordinates: " + String(cordenada.coordinates))
+
+    }
+
+    set setVelocidad(velocidad) {
+        this.type = velocidad.type;
+        this.veloidad = JSON.stringify(velocidad.coordinates);
+        //console.log(JSON.stringify(this.coordinates))
+
+    }
+
+
+    setCordenadasMongo(cordenada) {
+        this.type = cordenada.type;
+        this.coordinates = cordenada.coordinates;
+        //console.log(JSON.stringify(this.coordinates))
 
     }
 
     get getGeoJson() {
 
         var geoJson = new String(`{ \"type\": \"geojson\",\"data\": {\"type\": \"Feature\",  \"properties\": {}, \"geometry\": { \"type\": \"LineString\",  \"coordinates\": `)
-        console.log(JSON.stringify(this.coordinates))
+            //console.log(JSON.stringify(this.coordinates))
         var aux = geoJson + JSON.stringify(this.coordinates)
         geoJson = aux += '}}}'
 
         // obj['theTeam'].push({"teamId":"4","status":"pending"});
-        console.log(geoJson)
-            //return JSON.parse(geoJson);
+        //console.log(geoJson)
+        //return JSON.parse(geoJson);
         return geoJson
+    }
+    get getGeoJson_simple() {
+
+        var geoJson = new String(`{\"type\":\"LineString\",\"coordinates\":`)
+            //console.log(JSON.stringify(this.coordinates))
+        var aux = geoJson + JSON.stringify(this.coordinates)
+        geoJson = aux += '}'
+
+
+        //var static_foto = "https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A)/auto/500x300?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"
+
+        var static_foto = "https://api.mapbox.com"
+        return this.static_foto
     }
 
 
-
+    //https: //api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A%5B%5B-5.3106541%2C35.8882908%5D%2C%5B-5.3106541%2C35.8882908%5D%2C%5B-5.3106681%2C35.8882818%5D%5D%7D)/auto/500x300?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A
 
 
 
@@ -76,7 +105,6 @@ module.exports = Cordenadas
             }
         }
     }'
-
     //var cadena = JSON.parse(prueba)
     // prueba.data.geometry.coordinates.push
     */
