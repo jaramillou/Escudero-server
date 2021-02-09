@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.post('./login', function(req, res) { //pasar a login
+app.post('/login', function(req, res) { //pasar a login
     this.body = req.body
 
 
