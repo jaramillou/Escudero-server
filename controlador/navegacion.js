@@ -62,14 +62,19 @@ app.get('/muro', verificatoken, (req, res) => { //genera el muro con todas las s
 
 
         var URL_geojson = []
-        URL_geojson += `<head><title>${body.email}</title></head><body><p id="user">usuario</p>`
+        URL_geojson += `<head><script> function cerrar(){
+             
+            localStorage.removeItem('token')      
+             location.href="/"
+      
+ }</script></head><body><p id="user">usuario</p>`
         var sesion = 0
 
 
 
         if (usuarioDB.cordenadas.length == 0) URL_geojson += ' completa tu primera sesión!! <br><br>'
 
-        URL_geojson += 'para cerrar sesion, por ahora hay que borrar token a mano'
+        URL_geojson += '<input type="button" id = "botonCerrar"  value= "cerrar" onclick=cerrar()>'
 
         usuarioDB.cordenadas.forEach(function(element) {
             //localhost no funciona en el movil...
