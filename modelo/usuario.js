@@ -52,6 +52,9 @@ let usuarioSchema = new Schema({
     hora: {
         type: [String]
     },
+    hora_fin: {
+        type: [String]
+    },
     descripcion: {
         type: [String]
     },

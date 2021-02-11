@@ -62,7 +62,8 @@ app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada
     let velMax = this.body.velMax
 
     let coord = JSON.stringify(this.body.GeoJson)
-    console.log("enviado desde IOS: " + JSON.stringify(this.body.GeoJson))
+    console.log("hora enviado desde IOS: " + (this.body.hora))
+
 
 
     console.log("velMax: " + this.body.velMax)
@@ -77,7 +78,7 @@ app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada
             });
         }
 
-        console.log("usuario cargadossss: " + usuarioDB)
+        //console.log("usuario cargadossss: " + usuarioDB)
 
 
 
@@ -99,6 +100,28 @@ app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada
         }
     });
     Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { velMax: this.body.velMax } }, { new: true }, (err, usuarioDB) => {
+
+        if (err) {
+            console.log("error en push velocidad")
+            console.log(usuarioDB)
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+    });
+    Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora: this.body.hora } }, { new: true }, (err, usuarioDB) => {
+
+        if (err) {
+            console.log("error en push velocidad")
+            console.log(usuarioDB)
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+    });
+    Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora_fin: this.body.hora_fin } }, { new: true }, (err, usuarioDB) => {
 
         if (err) {
             console.log("error en push velocidad")

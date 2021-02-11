@@ -44,7 +44,7 @@ app.get('/muro', verificatoken, (req, res) => { //genera el muro con todas las s
 
 
 
-    console.log("cosas del token: " + body._id)
+
 
     Usuario.findById(body._id, function(err, usuarioDB) {
 
@@ -137,14 +137,29 @@ app.get('/mapa_header/:sesion_id', verificatoken, (req, res) => { //genera la se
                 err
             });
         }
-        cordenadas.coordinates = usuarioDB.cordenadas[0]
-        console.log("velMax cargado en sesion_ID: " + usuarioDB.cordenadas[1])
+
+        //  let tiempo_navegado = usuarioDB.hora_fin - usuarioDB.hora_fin
+        let tiempo_ini = Date.parse(usuarioDB.hora[sesionID])
+        let tiempo_fin = Date.parse(usuarioDB.hora_fin[sesionID])
+        var tiempo_navegado = tiempo_fin - tiempo_ini
+        var date = new Date(tiempo_navegado);
+
+        let sesion = "tiempo navegado: " + Math.trunc(tiempo_navegado / (1000 * 60 * 600)) + " horas, " + Math.trunc(tiempo_navegado / (1000 * 60)) + " minutoss, " + (tiempo_navegado / 1000) + " segundos. "
+            // console.log("tiempo navegado: " + tiempo_navegado / 1000 + " segundos, " + Math.trunc(tiempo_navegado / (1000 * 60)) + " minutoss," + Math.trunc(tiempo_navegado / (1000 * 60 * 600)) + " horas. ")
+
+
+
+        cordenadas.coordinates = usuarioDB.cordenadas[sesionID]
+
 
 
         res.render('home.hbs', {
             ok: true,
             coordinates: usuarioDB.cordenadas[sesionID],
-            velMax: usuarioDB.velMax[1]
+            velMax: usuarioDB.velMax[sesionID],
+            hora: usuarioDB.hora[sesionID],
+            hora_fin: usuarioDB.hora_fin[sesionID],
+            sesion: sesion
 
 
         });

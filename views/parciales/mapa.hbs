@@ -1,7 +1,7 @@
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
-<div id='map' style='width: 50%; height: 50%;'></div>
+<div id='map' style='width: 100%; height: 50%;'></div>
 
 <script>
 
@@ -75,8 +75,9 @@ var coordinates = geojson.data.geometry.coordinates
 });
 
 </script>
-<p>hora y fecha: </p>
-<p>tiempo navegado: </p>
+<p>hora inicio: {{ hora }}</p>
+<p>hora fin: {{ hora_fin }}</p>
+<p>tiempo navegado: {{ sesion }} </p>
 <p>velocidad máxima: {{ velMax}} </p>
 <p>Tiempo en planeo: </p>
 <p>porcentaje de planeo: </p>
