@@ -28,11 +28,11 @@ const mongoose = require('mongoose');
 
 
 const Cordenadas = require('../cordenada.js');
-const Sesiones = require('../Sesiones.js');
+//const Sesiones = require('../Sesiones.js');
 const Usuario = require('../modelo/usuario');
 const { getMaxListeners } = require('../modelo/usuario');
 var cordenadas = new Cordenadas('loro', 'pepe');
-var sesiones = new Sesiones('jesus')
+
 
 app.use(require('./login.js'))
 app.use(require('./nuevoUsuario.js'))

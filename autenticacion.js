@@ -23,7 +23,7 @@ let verificatoken = (req, res, next) => {
         }
 
         req.usuario = decode.usuario //payload usuario está dentro del token usuario
-        console.log("autentica.js usuario: " + decode.usuario._id)
+            //  console.log("autentica.js usuario: " + decode.usuario._id)
     })
 
     next()

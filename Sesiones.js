@@ -11,26 +11,56 @@ let nombreUsuario = "jesus"
 
 class Sesiones {
 
-    constructor(usuario) {
-            var cordenadas = new Cordenadas('loro', 'pepe');
-            nSesiones = this.numSesiones
 
+
+    set setCordenadas(usuario) {
+        this.usuarioDB = usuario;
+
+    }
+
+    mostrar() {
+        var sesion_usuario1 = 0
+        var sesion_usuario2 = 0
+
+        // var fecha_usuario1 = usuarioDB.hora[sesion_usuario1]
+        //  var fecha_usuario2 = usuarioDB.hora[sesion_usuario2]
+
+        /* if (fecha_usuario1 > fecha_usuario2) {
+            console.log("mora 1 mayor")
         }
-        //usuario = "pepe"
-        //spot = **
-        //Cordenadas = require('./cordenada.js');
+*/
+        console.log(usuarioDB.hora)
+
+    }
+}
+/*
+    //usuario = "pepe"
+    //spot = **
+    //Cordenadas = require('./cordenada.js');
 
 
     //ordenadas = []
 
 
 
-    cargarDatosUsuario(usuario, callback) {
+    cargarDatosUsuario(id, callback) {
+        
+        Usuario.findById(id, function(err, usuarioDB) { //falta gestión de usuario...
 
-        return fs.readFileSync(`db/${usuario}`, 'utf8')
+            if (err) {
+                console.log("error en calse sesiones cargarDtosdeUsario find:")
+                console.log(usuarioDB)
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            var rutas = UsuarioDB
 
 
-    }
+
+        });
+    };
 
     //cordenadas = new Cordenadas() 
 
@@ -47,7 +77,7 @@ class Sesiones {
             });
         }
 
-        //***************falta sumar en la variable de usuario jesus el numero de sesiones****************************** */
+        //***************falta sumar en la variable de usuario jesus el numero de sesiones****************************** 
     }
 
 
@@ -91,4 +121,7 @@ class Sesiones {
 }
 
 
+
+
+*/
 module.exports = Sesiones
