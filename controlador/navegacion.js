@@ -67,9 +67,13 @@ app.get('/muro', verificatoken, (req, res) => {
 
     let body = req.usuario
     var amigos = [
-        '6023a0cb5979150fc878b1ff',
-        '6023a0a95979150fc878b1fe',
+        '60314ad1c0d61c3d40814133'
     ]
+    amigos.push(req.usuario._id)
+    req.usuario.amigos.forEach(element => {
+        amigos.push(element)
+    });
+    console.log("amigos:  " + amigos)
     var URL_geojson = [] //coger el HTML de archivo mejor...
     URL_geojson += `<head><script> function cerrar(){               
              
@@ -83,8 +87,8 @@ app.get('/muro', verificatoken, (req, res) => {
     var sesion = 0
 
 
-    amigos.push(req.usuario._id)
-    console.log("amisgos = " + amigos)
+
+    //console.log("amisgos = " + amigos)
     Usuario.find({
         '_id': {
             $in: amigos
@@ -93,7 +97,7 @@ app.get('/muro', verificatoken, (req, res) => {
     }).sort({ nombre: 1 }).exec(function(err, usuarioDB) {
         //console.log(usuarioDB);
         if (err) {
-            console.log("error en find:")
+            console.log("error en find de muro:" + err)
                 //console.log(usuarioDB)
             return res.status(400).json({
                 ok: false,

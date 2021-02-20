@@ -58,7 +58,7 @@ app.post('/nuevo', function(req, res) { //Crea un usuario nuevo con correo disti
         email: body.email,
         password: bcrypt.hashSync(body.password, 5),
         role: 'ADMIN_ROLE',
-        amigos: 'su madre',
+        // amigos: '',
         //cordenadas: cordenadas.getCoordenadas
     });
 
