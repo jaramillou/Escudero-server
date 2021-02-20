@@ -1,0 +1,115 @@
+
+
+
+<html><body>
+
+<form id ='formulario'action="/buscarAmigos" method="POST">
+    
+            <label for="busca">Busca a tus amigos:</label >
+            <input type="search" id="buscar" name="busca">
+      
+   
+    <button type="button" onclick="myFunction()" id='botonOn'>on</button>
+</form>
+<div id="div0">{{ amigos }} de {{ id }} </div>
+<div id="div1">El texto superior se ha creado dinámicamente.</div>
+
+<input type="button" value="Genera_amigos" onclick="genera_amigos()">
+
+
+<script>
+
+async function myFunction(){
+
+
+    
+   // location.reload()
+    const formu = document.getElementById('formulario');
+    console.log(formu.busca.value)
+    usuarioEnvio=formu.busca.value;  
+    let url = '/buscarAmigos'
+    let datos = {
+        "busca" : formu.busca.value,
+   
+    }
+
+ const response = await fetch(url, {
+    method: 'POST', 
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(datos)
+     // body data type must match "Content-Type" header
+  }).then(response => response.json())
+    .then(json => {
+      //console.log(json.amigosDB[0].nombre)
+        let amigos=json.amigosDB._doc
+        var i=0
+       json.amigosDB.forEach( element => {
+
+
+            console.log(element.nombre) 
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", element.nombre);
+
+            newDiv.innerHTML=`<h1>${element.nombre}</h1> <input type="button" id = "botonMuro"  value= "seguir" onclick=seguir("${element._id}")> `
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div1").appendChild(newDiv);
+
+        })
+    
+  
+}).catch(err => {return console.log(err)});;
+
+}
+
+
+
+function seguir(id){
+
+        console.log("*********************************siguiendo******************************") 
+
+                             
+  var token1 = localStorage.getItem('token');
+  if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+        let h = new Headers();
+        h.append('authorization', `${token1}`);
+        let req = new Request(`/seguir/${id}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: h,
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            //body: JSON.stringify(id)
+        });
+
+
+
+       fetch(req)
+            .then(resp => resp.text())
+            .then(data => {
+
+              console.log("*********************************siguiendo******************************")
+              if(data.ok=true)
+
+                console.log("*********************************siguiendo******************************")
+                
+
+            });
+          
+
+}
+
+    }
+
+
+</script>
+</body></html>

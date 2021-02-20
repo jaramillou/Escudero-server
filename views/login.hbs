@@ -8,36 +8,7 @@
 
 
 <script>
-    /*
-function abrirUrlHeader(url) {
-    var token1 = localStorage.getItem('token');
-    if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
 
-        let h = new Headers();
-        h.append('authorization', `${token1}`);
-        let req = new Request(url, {
-            method: 'GET',
-            mode: 'cors',
-            headers: h
-        });
-
-
-
-        fetch(req)
-            .then(resp => resp.text())
-            .then(data => {
-
-                document.write(data);
-
-
-            })
-            .catch(err => {
-                console.log("error en funcion abrirUrlHeader")
-            })
-    }
-
-}
-*/
 
 
 </script>
@@ -69,6 +40,9 @@ function abrirUrlHeader(url) {
 
 
 async function myFunction(){
+
+
+    
    // location.reload()
     const formu = document.getElementById('formulario');
     console.log(formu.email.value)
@@ -78,6 +52,7 @@ async function myFunction(){
         "email" : formu.email.value,
         "password":  formu.password.value
     }
+    
     let token = await postData('/login', datos)
     
     // Headers.apply
@@ -88,29 +63,7 @@ async function myFunction(){
 
   
 }
-  // Ejemplo implementando el metodo POST:                      //https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Utilizando_Fetch
 
-
-   /*       
-  //este bloque guarda el token en localstorage y luego lo envía si fue creado para la petición.     
-$(document).ready( function() {   
-    $("#botonenviar").click( function() {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
-                                     
-            $.post("./login",$("#f1").serialize(),function(res){
-                c
-                Headers.apply
-                //alert(res.token)
-                localStorage.setItem('token', res.token);
-                let url = '/muro';
-                abrirUrlHeader(url)
-
-
-            });
-        
-    })
-        
-});
-*/
 
 
 
@@ -118,7 +71,7 @@ $(document).ready( function() {
 var token2= localStorage.getItem('token');
 
 if(token2!=null)  {
-     window.onload = bypass('/muro');
+    // window.onload = bypass('/muro');
 }
 
 async function postData(url = '', data = {}) {                      //pasar a head

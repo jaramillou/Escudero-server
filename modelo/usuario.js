@@ -60,6 +60,9 @@ let usuarioSchema = new Schema({
     },
     velMax: {
         type: [String]
+    },
+    amigos: {
+        type: [String]
     }
 
 });

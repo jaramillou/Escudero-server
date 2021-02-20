@@ -30,7 +30,7 @@ const Cordenadas = require('../cordenada.js');
 const Sesiones = require('../sesiones.js');
 
 const Usuario = require('../modelo/usuario');
-const usuario = require('../modelo/usuario');
+
 const { use } = require('./login');
 //const { getMaxListeners } = require('../modelo/usuario');
 var cordenadas = new Cordenadas('loro', 'pepe');
@@ -66,17 +66,26 @@ function menor(params) {
 app.get('/muro', verificatoken, (req, res) => {
 
     let body = req.usuario
-    var URL_geojson = []
-
-    var sesion = 0
     var amigos = [
         '6023a0cb5979150fc878b1ff',
         '6023a0a95979150fc878b1fe',
     ]
+    var URL_geojson = [] //coger el HTML de archivo mejor...
+    URL_geojson += `<head><script> function cerrar(){               
+             
+        localStorage.removeItem('token')      
+         location.href="/"
+  
+        }</script></head><body><p id="user">usuario</p>
+   <input type="button" id = "botonCerrar"  value= "cerrar" onclick=cerrar()>
+   <a href="/amigos/${req.usuario._id}" target="_blank" title="amigos">Amigos</a>`
+
+    var sesion = 0
+
 
     amigos.push(req.usuario._id)
     console.log("amisgos = " + amigos)
-    usuario.find({
+    Usuario.find({
         '_id': {
             $in: amigos
 
@@ -127,8 +136,10 @@ app.get('/muro', verificatoken, (req, res) => {
 
             console.log("menor = " + m)
 
+
+
             URL_geojson += `<div><br><br><h3>usuario: ${usuarioDB[m].nombre},   fecha: ${usuarioDB[m].hora[n[m]]} </h3> `
-            URL_geojson += `<a href="/${n[m]}/${usuarioDB[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${usuarioDB[m].cordenadas[n[m]]}%7D)/auto/1000x600?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"/>
+            URL_geojson += `<a href="/sesion/${n[m]}/${usuarioDB[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${usuarioDB[m].cordenadas[n[m]]}%7D)/auto/1000x600?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"/>
             </a></div>`
             n[m]--
         }
@@ -152,7 +163,7 @@ app.get('/muro', verificatoken, (req, res) => {
 
 
 
-app.get('/:sesion_id/:id', (req, res) => { //para introducir cabecera de token JWT a home.hbs
+app.get('/sesion/:sesion_id/:id', (req, res) => { //para introducir cabecera de token JWT a home.hbs
 
     //res.header("Access-Control-Allow-Origin", '*');
 

@@ -49,7 +49,7 @@ app.post('/login', function(req, res) { //pasar a login
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
-                err: `cotraseña incorrecta ${usuarioDB.password}`,
+                err: `cotraseña incorrecta `,
 
             })
         }
