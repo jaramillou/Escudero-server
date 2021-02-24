@@ -27,7 +27,7 @@ const mongoose = require('mongoose');
 
 
 const Cordenadas = require('../cordenada.js');
-const Sesiones = require('../sesiones.js');
+//const Sesiones = require('../sesiones.js');
 
 const Usuario = require('../modelo/usuario');
 
