@@ -19,21 +19,46 @@ app.get('/amigos/:id', (req, res) => {
 
         if (err) {
             console.log("error en find, campo: " + id)
-            console.log(usuarioDB)
+                // console.log(usuarioDB)
             return res.status(400).json({
                 ok: false,
                 err
             });
         }
+        var cadenaAmigos = ""
+        Usuario.find({
+            '_id': {
+                $in: usuarioDB.amigos
+
+            }
+        }).sort({ nombre: 1 }).exec(function(err, amigosDB) {
+
+            if (err) {
+                console.log("error en find de muro:" + err)
+
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            amigosDB.forEach(amigoN => {
+
+                cadenaAmigos += amigoN.nombre + " "
+            });
+            console.log("holaaa  " + cadenaAmigos)
 
 
-        //console.log("valor de compis:::   " + compis)
 
-        res.render('amigos.hbs', {
-            ok: true,
-            amigos: usuarioDB.amigos,
-            id
 
+            //console.log("valor de compis:::   " + compis)
+
+            res.render('amigos.hbs', {
+                ok: true,
+                amigos: cadenaAmigos,
+                id,
+                nombre_id: usuarioDB.nombre
+            });
         });
     });
 
@@ -47,7 +72,7 @@ app.post('/buscarAmigos', (req, res) => {
 
     this.body = req.body
 
-    console.log("holaaaaaaaaaaaaaaaaaaaaaaaaa " + req.body.busca)
+    //console.log("holaaaaaaaaaaaaaaaaaaaaaaaaa " + req.body.busca)
     Usuario.find({ nombre: req.body.busca }, (err, amigosDB) => {
         if (err) {
             return res.status(500).json({ // fallo mongoDB
@@ -68,7 +93,7 @@ app.post('/buscarAmigos', (req, res) => {
 
             cadenaAmigos += "amigo encontrado: " + amigoN.nombre
         });
-        console.log("holaaa  " + amigosDB)
+        // console.log("holaaa  " + amigosDB)
 
 
         // res.send(cadenaAmigos)
@@ -94,7 +119,7 @@ app.post('/seguir/:id', verificatoken, (req, res) => {
 
         if (err) {
             console.log("error en find, campo: " + id)
-            console.log(usuarioDB)
+                // console.log(usuarioDB)
             return res.status(400).json({
                 ok: false,
                 err
@@ -113,7 +138,7 @@ app.post('/seguir/:id', verificatoken, (req, res) => {
 
                 }
                 console.log(req.usuario._id + "-------------------------------------siguiendo--------------------------------" + req.params.id)
-                console.log(usuarioDB)
+                    // console.log(usuarioDB)
 
             });
         } else console.log("el amigo ya es nuestro amigo")

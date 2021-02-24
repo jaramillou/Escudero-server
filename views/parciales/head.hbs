@@ -30,7 +30,7 @@ function abrirUrlHeader(url) {
             .then(data => {
                  //document.body.innerHTML = data;
                 document.write(data);
-                //document.close()////////////////////////////////////////////puestso sin probar para que deje de cargar
+                document.close()////////////////////////////////////////////puestso sin probar para que deje de cargar
               
                 
 
@@ -63,6 +63,14 @@ function abrirUrlHeader(url) {
          
     }
 
+   function muro(){
+
+                document.body.innerHTML=null                  
+                 var url = '/muro';
+             
+                abrirUrlHeader(url)
+
+    }
 
 </script>
 

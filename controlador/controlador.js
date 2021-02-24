@@ -64,7 +64,7 @@ app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada
     let velMax = this.body.velMax
 
     let coord = JSON.stringify(this.body.GeoJson)
-    console.log("hora enviado desde IOS: " + (this.body.hora))
+    console.log(req.usuario.nombre + " este usuario con hora enviado desde IOS: " + (this.body.hora))
 
 
 
@@ -72,7 +72,7 @@ app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada
     Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { cordenadas: coord } }, { new: true }, (err, usuarioDB) => {
 
         if (err) {
-            console.log("error en push coordenadas")
+
             console.log(usuarioDB)
             return res.status(400).json({
                 ok: false,
@@ -82,7 +82,7 @@ app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada
 
         //console.log("usuario cargadossss: " + usuarioDB)
 
-
+        console.log("cordenadas añadidas******")
 
         res.json({
             ok: true,

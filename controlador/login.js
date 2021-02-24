@@ -60,7 +60,7 @@ app.post('/login', function(req, res) { //pasar a login
 
 
         //enviarlo al muro
-        //res.redirect('/muro')
+        // res.redirect('/muro')
 
         res.json({
             ok: true,

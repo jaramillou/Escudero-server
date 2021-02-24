@@ -1,20 +1,25 @@
 
 
 
-<html><body>
-
+<html>
+{{> head }}
+<body>
+ <input type="button" id = "botonMuro"  value= "<<<atras" onclick=muro()>
 <form id ='formulario'action="/buscarAmigos" method="POST">
     
             <label for="busca">Busca a tus amigos:</label >
             <input type="search" id="buscar" name="busca">
+  <button type="button" onclick="myFunction()" id='botonOn'>Buscar</button>
+            </form>
       
    
-    <button type="button" onclick="myFunction()" id='botonOn'>on</button>
+    
 </form>
-<div id="div0">{{ amigos }} de {{ id }} </div>
-<div id="div1">El texto superior se ha creado dinámicamente.</div>
 
-<input type="button" value="Genera_amigos" onclick="genera_amigos()">
+<div id="div0"><h2>amigos: </h2>{{ amigos }}  <h2>de {{ nombre_id }} </h2></div>
+<div id="div1"></div>
+
+
 
 
 <script>

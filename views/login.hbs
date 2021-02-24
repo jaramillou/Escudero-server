@@ -71,7 +71,7 @@ async function myFunction(){
 var token2= localStorage.getItem('token');
 
 if(token2!=null)  {
-    // window.onload = bypass('/muro');
+     window.onload = bypass('/muro');
 }
 
 async function postData(url = '', data = {}) {                      //pasar a head
@@ -93,9 +93,12 @@ async function postData(url = '', data = {}) {                      //pasar a he
     .then(json => {
         let token=json.token
         if(token!=null){
+            
             localStorage.setItem('token', json.token);
+             location.reload();
             let url = '/muro';
             abrirUrlHeader(url)
+            
         }
         
         })
