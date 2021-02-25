@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken')
 const verificatoken = require('../autenticacion')
 
 
+var simplify = require('../simplifica')
 
 
 // parse application/x-www-form-urlencoded
@@ -63,31 +64,49 @@ function menor(params) {
 
 
 
-app.get('/muro', verificatoken, (req, res) => {
+app.get('/muro', verificatoken, async(req, res) => {
 
     let body = req.usuario
     var amigos = []
-    amigos.push(req.usuario._id) //añadimos a sí mismo para mostrar en muro y a continuación sus amigos
-    req.usuario.amigos.forEach(element => {
-        amigos.push(element)
+
+    let usuario = await Usuario.findById(req.usuario._id, function(err, usuarioDB) { //falta gestión de usuario...
+
+
+        // console.log("amigos req :  " + amigos)
+
+
+
     });
-    console.log("amigos:  " + amigos)
+    usuario.amigos.forEach(element => {
+        amigos.push(element)
+        console.log("añadimos amigo: " + element)
+    })
+
+
+    console.log("amigos variable :  " + usuario.amigos)
+    console.log("amigos req :  " + amigos)
+    amigos.push(usuario._id) //añadimos a sí mismo para mostrar en muro y a continuación sus amigos
+
+    console.log("numero de amigos:  " + amigos.length)
+    console.log("amigos total :  " + amigos)
     var URL_geojson = [] //coger el HTML de archivo mejor... mientras un poco de spaguettis:
     URL_geojson += `<head><script> function cerrar(){                    
              
         localStorage.removeItem('token')      
          location.href="/"
   
-        }</script></head><body><p id="user">${req.usuario.nombre}</p>
+        }</script></head><body><p id="user">${usuario.nombre}</p>
    <input type="button" id = "botonCerrar"  value= "cerrar" onclick=cerrar()>`
     URL_geojson += '          '
-    URL_geojson += `<a href="/amigos/${req.usuario._id   }   "><br><h2> Amigos</h2></a>`
+    URL_geojson += `<a href="/amigos/${usuario._id   }   "><br><h2> Amigos</h2></a>`
 
     var sesion = 0
 
+    //for (var i = 0; i < 1000; i++) { console.log("_") }
 
 
-    Usuario.find({
+
+    let user = Usuario.find({
         '_id': {
             $in: amigos
 
@@ -106,7 +125,7 @@ app.get('/muro', verificatoken, (req, res) => {
 
         }
 
-        // console.log("0 :" + usuarioDB[0].hora[0])
+        //  console.log("0 :" + usuarioDB[0].hora[0])
         //  console.log("1 :" + usuarioDB[1].hora[0])
         //  console.log("2 :" + usuarioDB[2].hora[0])
         var n = [] //nos servirá como puntero o iterador de cada usuario amigo
@@ -117,10 +136,10 @@ app.get('/muro', verificatoken, (req, res) => {
 
             n[i] = usuarioDB[i].hora.length - 1 //llevará la cuenta de los que ya se han puesto en cada vector
             total += usuarioDB[i].hora.length //número total de sesiones de los amiguetes
-                //   console.log("sesiones de cada usuariuo== " + usuarioDB[i].nombre + " : " + n[i])
+            console.log("sesiones de cada usuariuo== " + usuarioDB[i].nombre + " : " + n[i])
 
         }
-        console.log("amigos total = " + total)
+        //console.log("amigos total = " + total)
         for (var j = total - 1; j > -1; j--) { ///todos los campos de los amigos
             for (var i = 0; i < amigos.length; i++) { //cogemos cada amigo
                 if (n[i] > -1) {
@@ -136,12 +155,25 @@ app.get('/muro', verificatoken, (req, res) => {
             var m = menor(horas)
 
 
-            console.log("menor = " + m)
+            // console.log("menor = " + m)
 
+            //console.log("tamaño de cordenadas:  " + usuarioDB[m].cordenadas[n[m]].length)
+            // for (var i = 0; i < usuarioDB[m].cordenadas[n[m]].length; i++) {
 
+            var coord = new Cordenadas()
+                // console.log(usuarioDB[m].cordenadas[n[m]])
+            cordenadas.setCordenadas = usuarioDB[m].cordenadas[n[m]]
+            var aux = JSON.parse(usuarioDB[m].cordenadas[n[m]])
+                // var simplified = simplify(aux, 0.000000000000000000000000001)
+
+            var simplified = simplify(aux, 0.0001, false) //simplifico los datos con el algoritmo Douglas-Peucker para que "quepan" en la URL (~8K) 
+                //la variable tolerancia 0.0001 debería ser proporcianal al tamaño en la clase Cordenada 
+                //console.log(simplified)
+                // cordenadas.simple()
+                // };
 
             URL_geojson += `<div><br><br><h3>usuario: ${usuarioDB[m].nombre},  fecha: ${usuarioDB[m].hora[n[m]]} </h3> `
-            URL_geojson += `<a href="/sesion/${n[m]}/${usuarioDB[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${usuarioDB[m].cordenadas[n[m]]}%7D)/auto/1000x600?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"/>
+            URL_geojson += `<a href="/sesion/${n[m]}/${usuarioDB[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${JSON.stringify(simplified)}%7D)/auto/1000x600?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"/>
             </a></div>`
             n[m]--
         }
@@ -150,7 +182,7 @@ app.get('/muro', verificatoken, (req, res) => {
 
 
 
-        setTimeout(function() {}, 300000);
+        // setTimeout(function() {}, 300000);
         res.send(URL_geojson)
     });
 
@@ -195,7 +227,7 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
     //leerfichero de sesiones elegida en sesion_id
 
     //let body = req.usuario
-    console.log("parametros:: " + req.params.id)
+    //console.log("parametros:: " + req.params.id)
 
     Usuario.findById(id, function(err, usuarioDB) { //falta gestión de usuario...
 

@@ -21,6 +21,8 @@
         "mongoose": "^5.10.5",
         "mongoose-unique-validator": "^2.0.3",
         "node-pause": "^1.0.1",
+        "simplify-geojson": "^1.0.4",
+        "simplify-js": "^1.2.4",
         "system-sleep": "^1.3.7"
     }
 }

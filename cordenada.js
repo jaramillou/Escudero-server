@@ -1,21 +1,28 @@
 class Cordenadas {
 
-    constructor() {
-        // this.type = cordenada.type;
-        //this.coordinates = cordenada.coordinates;
+    constructor(cordenada) {
+
+        this.coordinates = cordenada;
     }
 
 
 
 
     get getCoordenadas() {
-        return this.coordinates;
-    }
+            return this.coordinates;
+        }
+        /*
+            set setCordenadas(cordenada) {
+                this.type = cordenada.type;
+                this.coordinates = JSON.stringify(cordenada.coordinates);
+                console.log("coordinates: " + String(cordenada.coordinates))
 
+            }
+        */
     set setCordenadas(cordenada) {
         this.type = cordenada.type;
-        this.coordinates = JSON.stringify(cordenada.coordinates);
-        console.log("coordinates: " + String(cordenada.coordinates))
+        this.coordinates = cordenada;
+        //console.log("coordinates: " + String(cordenada.coordinates))
 
     }
 
@@ -34,9 +41,20 @@ class Cordenadas {
 
     }
 
+    simple() {
+        var aux = [String]
+        if (this.coordinates.length > 100) {
+            console.log("mayor que 100")
+            for (var i = 0; i < this.coordinates.length; i++)
+                console.log(this.coordinates[i])
+        }
+    }
+
     get getGeoJson() {
 
-        var geoJson = new String(`{ \"type\": \"geojson\",\"data\": {\"type\": \"Feature\",  \"properties\": {}, \"geometry\": { \"type\": \"LineString\",  \"coordinates\": `)
+
+
+        var geoJson = new String(`{ \"type\": \"FeatureCollection\",\"features\": {\"type\": \"Feature\",  \"properties\": {}, \"geometry\": { \"type\": \"LineString\",  \"coordinates\": `)
             //console.log(JSON.stringify(this.coordinates))
         var aux = geoJson + JSON.stringify(this.coordinates)
         geoJson = aux += '}}}'
@@ -56,8 +74,7 @@ class Cordenadas {
 
         //var static_foto = "https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A)/auto/500x300?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"
 
-        var static_foto = "https://api.mapbox.com"
-        return this.static_foto
+
     }
 
 
