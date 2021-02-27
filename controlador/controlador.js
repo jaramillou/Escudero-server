@@ -138,4 +138,107 @@ app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada
 
 
 
+
+
+app.post('/borrar/:sesionID', verificatoken, async(req, res) => {
+
+
+    let sesionID = req.params.sesionID; //será el número de sesión
+    let id = req.body._id;
+
+    console.log("cordenadas  borrando elemento: " + sesionID)
+
+
+
+    var usuario = await Usuario.findById(req.usuario._id, function(err, usuarioDB) { //falta gestión de usuario...
+
+        // console.log("amigos req :  " + amigos)
+
+    });
+    console.log("cordenadas  borrado elemento: " + usuario.cordenadas)
+    usuario.cordenadas.splice([sesionID][sesionID], 1)
+        //usuario.velocidad.splice(0, 1) //reparar velocidad en matriz como cordenadas
+    usuario.hora.splice(sesionID, 1)
+    usuario.hora_fin.splice(sesionID, 1)
+    usuario.velMax.splice(sesionID, 1)
+        //usuario.descripcion.splice(0, 1)
+    usuario.save(function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("cordenadas  borrado elemento: " + usuario.cordenadas)
+        }
+    });
+
+    /*
+        var borrado = Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $pull: { cordenadas: {cordenadas.0} } }, (err, usuarioDB) => {
+
+            if (err) {
+
+                console.log("cordenadas no borradas")
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            console.log("cordenadas  borrado elemento: " + usuarioDB)
+
+            res.json({
+                ok: true,
+                usuario: usuarioDB
+            });
+
+        });
+
+        
+            Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { velocidad: vel } }, { new: true }, (err, usuarioDB) => {
+
+                if (err) {
+                    console.log("error en push velocidad")
+                    console.log(usuarioDB)
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+            });
+            Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { velMax: this.body.velMax } }, { new: true }, (err, usuarioDB) => {
+
+                if (err) {
+                    console.log("error en push velocidad")
+                    console.log(usuarioDB)
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+            });
+            Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora: this.body.hora } }, { new: true }, (err, usuarioDB) => {
+
+                if (err) {
+                    console.log("error en push velocidad")
+                    console.log(usuarioDB)
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+            });
+            Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora_fin: this.body.hora_fin } }, { new: true }, (err, usuarioDB) => {
+
+                if (err) {
+                    console.log("error en push velocidad")
+                    console.log(usuarioDB)
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+                */
+});
+
+
+
+
 module.exports = app

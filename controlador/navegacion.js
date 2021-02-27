@@ -71,10 +71,7 @@ app.get('/muro', verificatoken, async(req, res) => {
 
     let usuario = await Usuario.findById(req.usuario._id, function(err, usuarioDB) { //falta gestión de usuario...
 
-
         // console.log("amigos req :  " + amigos)
-
-
 
     });
     usuario.amigos.forEach(element => {
@@ -271,7 +268,9 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
             velMax: usuarioDB.velMax[sesionID],
             hora: usuarioDB.hora[sesionID],
             hora_fin: usuarioDB.hora_fin[sesionID],
-            sesion: sesion
+            sesion: sesion,
+            sesionID,
+            id
 
 
         });
@@ -280,6 +279,7 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
 
 
 });
+
 
 
 
