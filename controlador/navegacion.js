@@ -75,6 +75,7 @@ app.get('/muro', verificatoken, async(req, res) => {
 
     });
     usuario.amigos.forEach(element => {
+
         amigos.push(element)
         console.log("añadimos amigo: " + element)
     })
@@ -130,11 +131,11 @@ app.get('/muro', verificatoken, async(req, res) => {
         var total = 0 //anotaremos el total de sesiones propias y de los amigos
 
         for (var i = 0; i < amigos.length; i++) {
-
-            n[i] = usuarioDB[i].hora.length - 1 //llevará la cuenta de los que ya se han puesto en cada vector
-            total += usuarioDB[i].hora.length //número total de sesiones de los amiguetes
-            console.log("sesiones de cada usuariuo== " + usuarioDB[i].nombre + " : " + n[i])
-
+            if (usuarioDB[i]) {
+                n[i] = usuarioDB[i].hora.length - 1 //llevará la cuenta de los que ya se han puesto en cada vector
+                total += usuarioDB[i].hora.length //número total de sesiones de los amiguetes
+                console.log("sesiones de cada usuariuo== " + usuarioDB[i].nombre + " : " + n[i])
+            }
         }
         //console.log("amigos total = " + total)
         for (var j = total - 1; j > -1; j--) { ///todos los campos de los amigos

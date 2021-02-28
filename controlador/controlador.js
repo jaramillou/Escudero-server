@@ -155,19 +155,21 @@ app.post('/borrar/:sesionID', verificatoken, async(req, res) => {
         // console.log("amigos req :  " + amigos)
 
     });
-    console.log("cordenadas  borrado elemento: " + usuario.cordenadas)
-    usuario.cordenadas.splice([sesionID][sesionID], 1)
-        //usuario.velocidad.splice(0, 1) //reparar velocidad en matriz como cordenadas
+    console.log("cordenadas  borrado elemento: " + usuario.cordenadas[sesionID])
+    usuario.cordenadas.splice([sesionID], 1)
+    usuario.velocidad.splice(0, 1) //reparar velocidad en matriz como cordenadas
     usuario.hora.splice(sesionID, 1)
     usuario.hora_fin.splice(sesionID, 1)
     usuario.velMax.splice(sesionID, 1)
-        //usuario.descripcion.splice(0, 1)
+    usuario.descripcion.splice(0, 1)
+
     usuario.save(function(err) {
         if (err) {
             console.log(err);
         } else {
             console.log("cordenadas  borrado elemento: " + usuario.cordenadas)
         }
+
     });
 
     /*

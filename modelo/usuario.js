@@ -68,7 +68,7 @@ let usuarioSchema = new Schema({
 });
 
 
-usuarioSchema.methods.toJSON = function() { //evitar que vean donde está guardada la contraseña al cliente
+usuarioSchema.methods.toJSON = function() { //evitar que vean donde está guardada la contraseña al cliente y el token ocupe mucho
 
     let user = this;
     let userObject = user.toObject();

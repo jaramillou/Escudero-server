@@ -3,7 +3,7 @@
 
 <html>
 {{> head }}
-<body>
+<body onload="mostrarAmigos({{ amigos_id }})">
  <input type="button" id = "botonMuro"  value= "<<<atras" onclick=muro()>
 <form id ='formulario'action="/buscarAmigos" method="POST">
     
@@ -16,13 +16,45 @@
     
 </form>
 
-<div id="div0"><h2>amigos: </h2>{{ amigos }}  <h2>de {{ nombre_id }} </h2></div>
+<div id="div0"><h2>amigos: </h2><h2 id="seguidos">{{ amigos }}</h2>  <h2>de {{ nombre_id }} </h2> </div>
+<div id="div2"><h2 id="otros" >pepito palotes</h2></div>
 <div id="div1"></div>
 
 
 
 
 <script>
+
+
+
+//window.onload = mostrarAmigos();
+
+function mostrarAmigos(ami){
+  var amigos = document.getElementById('seguidos').innerHTML;
+  var res = amigos.split(",");
+  var i=0;
+  //var otros = document.getElementById('otros');
+  //otros.innerHTML=amigos.nodeValue
+  ami.forEach( element => {
+    console.log(element.nombre) 
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", element);
+
+            newDiv.innerHTML=`<h1>${res[i]}</h1> <input type="button" id = "botonMuro"  value= "no seguir" onclick=noSeguir("${element}")> `
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div1").appendChild(newDiv);
+            i++;
+            
+
+    //alert(element)
+  });
+}
+
+
+function muestra(){
+  
+}
 
 async function myFunction(){
 
@@ -111,9 +143,47 @@ function seguir(id){
             });
           
 
+  }
+
 }
 
-    }
+function noSeguir(id){
+
+        console.log("*********************************no siguiendo******************************") 
+
+                             
+  var token1 = localStorage.getItem('token');
+  if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+        let h = new Headers();
+        h.append('authorization', `${token1}`);
+        let req = new Request(`/noSeguir/${id}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: h,
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            //body: JSON.stringify(id)
+        });
+
+
+
+       fetch(req)
+            .then(resp => resp.text())
+            .then(data => {
+
+              console.log("*********************************no siguiendo******************************")
+              if(data.ok=true)
+
+                console.log("*********************************no siguiendo******************************")
+                
+
+            });
+          
+
+  }
+
+}
 
 
 </script>

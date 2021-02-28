@@ -25,7 +25,7 @@ app.get('/amigos/:id', (req, res) => {
                 err
             });
         }
-        var cadenaAmigos = ""
+        var cadenaAmigos = []
         Usuario.find({
             '_id': {
                 $in: usuarioDB.amigos
@@ -44,20 +44,20 @@ app.get('/amigos/:id', (req, res) => {
 
             amigosDB.forEach(amigoN => {
 
-                cadenaAmigos += amigoN.nombre + " "
+                cadenaAmigos.push(amigoN.nombre)
             });
             console.log("holaaa  " + cadenaAmigos)
 
 
 
 
-            //console.log("valor de compis:::   " + compis)
+            console.log("valor de compis:::   " + usuarioDB.amigos)
 
             res.render('amigos.hbs', {
                 ok: true,
                 amigos: cadenaAmigos,
                 id,
-                nombre_id: usuarioDB.nombre
+                amigos_id: JSON.stringify(usuarioDB.amigos)
             });
         });
     });
@@ -150,5 +150,46 @@ app.post('/seguir/:id', verificatoken, (req, res) => {
 
 });
 
+
+
+app.post('/noSeguir/:id', verificatoken, (req, res) => {
+    // let sesionID = req.params.sesion_id; //será el número de sesión
+    let id = req.params.id;
+
+
+    Usuario.findById(req.usuario._id, function(err, usuarioDB) { //falta gestión de usuario...
+
+        if (err) {
+            console.log("error en find, campo: " + id)
+                // console.log(usuarioDB)
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        if (usuarioDB.amigos.includes(id) != false) {
+            Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $pull: { amigos: req.params.id } }, { new: true }, (err, usuarioDB) => {
+
+                if (err) {
+                    console.log("error en añadir amigos")
+                    console.log(usuarioDB)
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+
+                }
+                console.log(req.usuario._id + "-------------------------------------no siguiendo--------------------------------" + req.params.id)
+                    // console.log(usuarioDB)
+
+            });
+        } else console.log("el amigo ya no es nuestro amigo")
+
+    });
+    res.json({
+        ok: true,
+    });
+
+});
 
 module.exports = app
