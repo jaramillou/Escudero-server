@@ -11,9 +11,9 @@ const jwt = require('jsonwebtoken')
 const verificatoken = require('../autenticacion')
 
 
-app.get('/amigos/:id', (req, res) => {
+app.get('/amigos', verificatoken, (req, res) => {
 
-    var id = req.params.id
+    var id = req.usuario._id
 
     Usuario.findById(id, function(err, usuarioDB) { //falta gestión de usuario...
 

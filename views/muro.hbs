@@ -1,21 +1,127 @@
+
 {{> head }}
 
-<body>
- 
-   <a href="www.google.es"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A{{geojson_foto}}%7D)/auto/500x300?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"</a>
+ <body onload="mostrarMuro({{ muro }})">
 
-{{ URL }}
+    {{> navbar }}
 
-</h1>
 
-<!--
-     {{> mapa par='map0' cord = coordinates0 }}
-    {{> mapa par='map2' cord = coordinates2 }}
+<div id="div1"><h2 id="otros" >Muro</h2></div>
 
-  -->
+
+<script>
+
+
+
+
+  function mostrarMuro(aux){
+    console.log(aux)
+      var n = [] //nos servirá como puntero o iterador de cada usuario amigo
+      var horas = [] //para anotar la hora de cada iterador 
+      var total = 0 //anotaremos el total de sesiones propias y de los amigos
+
+      for (var i = 0; i < aux.length; i++) {
+        if (aux[i]) {
+          n[i] = aux[i].hora.length - 1 //llevará la cuenta de los que ya se han puesto en cada vector
+          total += aux[i].hora.length //número total de sesiones de los amiguetes
+          console.log("sesiones de cada usuariuo== " + aux[i].nombre + " : " + n[i])
+            }
+        }
+     for (var j = total - 1; j > -1; j--) { ///todos los campos de los amigos
+        for (var i = 0; i < aux.length; i++) { //cogemos cada amigo
+          if (n[i] > -1) {
+            horas[i] = aux[i].hora[n[i]] //juntamos las horas que quedan
+                        // console.log("horas en usuario== " + usuarioDB[i].nombre + " : " + horas[i])
+          } else horas[i] = null
+
+
+
+        }
+            //[usuarioDB[0].hora[0], usuarioDB[1].hora[0], usuarioDB[2].hora[0]]
+
+            var m = menor(horas)
+
+
+            // console.log("menor = " + m)
+
+            //console.log("tamaño de cordenadas:  " + usuarioDB[m].cordenadas[n[m]].length)
+            // for (var i = 0; i < usuarioDB[m].cordenadas[n[m]].length; i++) {
+
+            //var coord = new Cordenadas()
+                // console.log(usuarioDB[m].cordenadas[n[m]])
+            //cordenadas.setCordenadas = usuarioDB[m].cordenadas[n[m]]
+            var cord = JSON.parse(aux[m].cordenadas[n[m]])
+                // var simplified = simplify(aux, 0.000000000000000000000000001)
+
+            var simplified = simplify(cord, 0.0001, false) //simplifico los datos con el algoritmo Douglas-Peucker para que "quepan" en la URL (~8K) 
+                //la variable tolerancia 0.0001 debería ser proporcianal al tamaño en la clase Cordenada 
+                //console.log(simplified)
+                // cordenadas.simple()
+                // };
+
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", aux[m].nombre);
+
+            newDiv.innerHTML= `<div><br><br><h3>usuario: ${aux[m].nombre},  fecha: ${aux[m].hora[n[m]]} </h3> 
+            <a href="/sesion/${n[m]}/${aux[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${JSON.stringify(simplified)}%7D)/auto/1000x600?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A"/>
+            </a></div><br>`
+            document.getElementById("div1").appendChild(newDiv);
+            n[m]--
+
+      }
+
+
+
+
+/*
+aux.forEach( element => {
+    console.log(element.nombre) 
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", element);
+
+            newDiv.innerHTML=` <input type="button" id = "botonMuro"  value= "no seguir" onclick=noSeguir("${element}")> `
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div1").appendChild(newDiv);
+            i++;
+            
+
+    //alert(element)
+  });
+  */
     
-     
+}
 
+
+function menor(params) {
+    var aux = params[0]
+    var pos = 0
+    for (var i = 0; i < params.length; i++) {
+
+        if (aux < params[i] || aux == null) {
+            // console.log(aux + " > " + params[i] + "cambia pos...")
+            aux = params[i]
+            pos = i
+
+        } else {
+            // console.log(aux + " < " + params[i])
+
+
+        }
+
+    }
+    return pos
+}
+</script>
+  <script src="/assets/js/simplifica.js"></script>
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+   <script src="/assets/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+   
     
     
   
@@ -27,12 +133,7 @@
 
 
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
 
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
 
+</script>
 </body>
-
-</html>

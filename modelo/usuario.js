@@ -73,8 +73,8 @@ usuarioSchema.methods.toJSON = function() { //evitar que vean donde está guarda
     let user = this;
     let userObject = user.toObject();
     delete userObject.password;
-    delete userObject.cordenadas;
-    delete userObject.velocidad;
+    // delete userObject.cordenadas;
+    //delete userObject.velocidad;
 
 
 
