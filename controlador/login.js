@@ -60,6 +60,12 @@ app.post('/login', function(req, res) { //pasar a login
         usuarioDB.descripcion = null
         usuarioDB.velMax = null
             //usuarioDB.amigos = null
+        usuarioDB.viento = null
+        usuarioDB.dir = null
+        usuarioDB.temp = null
+        usuarioDB.clima = null
+        usuarioDB.spot = null
+
         let token = jwt.sign({
             usuario: usuarioDB
         }, process.env.semilla, { expiresIn: 60 * 60 * 24 * 365 });
