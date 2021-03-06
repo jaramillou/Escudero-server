@@ -63,6 +63,21 @@ let usuarioSchema = new Schema({
     },
     amigos: {
         type: [String]
+    },
+    viento: {
+        type: [String]
+    },
+    dir: {
+        type: [String]
+    },
+    temp: {
+        type: [String]
+    },
+    clima: {
+        type: [String]
+    },
+    spot: {
+        type: [String]
     }
 
 });

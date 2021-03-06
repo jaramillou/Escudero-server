@@ -75,16 +75,16 @@ app.get('/muro', verificatoken, async(req, res) => {
     usuario.amigos.forEach(element => {
 
         amigos.push(element)
-        console.log("añadimos amigo: " + element)
+            //console.log("añadimos amigo: " + element)
     })
 
 
-    console.log("amigos variable :  " + usuario.amigos)
-    console.log("amigos req :  " + amigos)
+    // console.log("amigos variable :  " + usuario.amigos)
+    //console.log("amigos req :  " + amigos)
     amigos.push(usuario._id) //añadimos a sí mismo para mostrar en muro y a continuación sus amigos
 
-    console.log("numero de amigos:  " + amigos.length)
-    console.log("amigos total :  " + amigos)
+    //console.log("numero de amigos:  " + amigos.length)
+    // console.log("amigos total :  " + amigos)
     var URL_geojson = [] //coger el HTML de archivo mejor... mientras un poco de spaguettis:
     URL_geojson += `<head><script> function cerrar(){                    
              
@@ -277,7 +277,12 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
             hora_fin: usuarioDB.hora_fin[sesionID],
             sesion: sesion,
             sesionID,
-            id
+            id,
+            viento: usuarioDB.viento[sesionID],
+            dir: usuarioDB.dir[sesionID],
+            clima: usuarioDB.clima[sesionID],
+            spot: usuarioDB.spot[sesionID],
+            temp: usuarioDB.temp[sesionID]
 
 
         });

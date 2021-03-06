@@ -46,12 +46,12 @@ app.get('/amigos', verificatoken, (req, res) => {
 
                 cadenaAmigos.push(amigoN.nombre)
             });
-            console.log("holaaa  " + cadenaAmigos)
+            //console.log("holaaa  " + cadenaAmigos)
 
 
 
 
-            console.log("valor de compis:::   " + usuarioDB.amigos)
+            // console.log("valor de compis:::   " + usuarioDB.amigos)
 
             res.render('amigos.hbs', {
                 ok: true,
@@ -70,10 +70,11 @@ app.get('/amigos', verificatoken, (req, res) => {
 app.post('/buscarAmigos', (req, res) => {
 
 
-    this.body = req.body
+    let palabra = req.body.busca
+
 
     //console.log("holaaaaaaaaaaaaaaaaaaaaaaaaa " + req.body.busca)
-    Usuario.find({ nombre: req.body.busca }, (err, amigosDB) => {
+    Usuario.find({ nombre: { $regex: palabra, $options: "i" } }, (err, amigosDB) => {
         if (err) {
             return res.status(500).json({ // fallo mongoDB
                 ok: false,

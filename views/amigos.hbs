@@ -7,7 +7,7 @@
 
   {{> navbar }}
 
- <input type="button" id = "botonMuro"  value= "<<<atras" onclick=muro()>
+ <br><br>
 <form id ='formulario'action="/buscarAmigos" method="POST">
     
             <label for="busca">Busca a tus amigos:</label >
@@ -19,8 +19,8 @@
     
 </form>
 
-<div id="div0"><h2>amigos: </h2><h2 id="seguidos">{{ amigos }}</h2>  <h2>de {{ nombre_id }} </h2> </div>
-<div id="div2"><h2 id="otros" >pepito palotes</h2></div>
+<div id="div0"><h2>amigos actuales : </h2><h2 id="seguidos" style="visibility: hidden" >{{ amigos }}</h2>  </div>
+<div id="div2"><h2 id="otros" ></h2></div>
 <div id="div1"></div>
 
 

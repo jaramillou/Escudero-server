@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken')
 const verificatoken = require('../autenticacion')
 
 
+
 require('../config');
 const port = process.env.PORT || 3000;
 
@@ -26,8 +27,9 @@ app.use(bodyParser.json())
 const hbs = require('hbs')
 const mongoose = require('mongoose');
 
-
+const tiempo = require('./clima.js');
 const Cordenadas = require('../cordenada.js');
+
 //const Sesiones = require('../Sesiones.js');
 const Usuario = require('../modelo/usuario');
 const { getMaxListeners } = require('../modelo/usuario');
@@ -38,6 +40,7 @@ app.use(require('./login.js'))
 app.use(require('./nuevoUsuario.js'))
 app.use(require('./navegacion.js'))
 app.use(require('./amigos.js'))
+
 
 
 app.use(express.static('public'));
@@ -54,86 +57,122 @@ app.use(express.static('public'));
 
 
 
-app.post('/envio', verificatoken, function(req, res) { // añade nueva cordenada al usuario
+app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada al usuario
     res.header("Access-Control-Allow-Origin", '*');
     this.body = req.body
+
+
+
+
 
 
 
     let vel = this.body.velocidad
     let velMax = this.body.velMax
 
-    let coord = JSON.stringify(this.body.GeoJson)
     console.log(req.usuario.nombre + " este usuario con hora enviado desde IOS: " + (this.body.hora))
+
+    let coord = JSON.stringify(this.body.GeoJson)
+
+
+    var a = await tiempo.climaSpot(this.body.GeoJson[0][1], this.body.GeoJson[0][0])
+
+    console.log("tiempo en: " + this.body.GeoJson[0][1] + ' , ' + this.body.GeoJson[0][0] + " = " + a.dir)
+
+    //var usuario = await Usuario.findOneAndUpdate(req.usuario._id, function(err, usuarioDB) { //falta gestión de usuario...
+
+    // console.log("amigos req :  " + amigos)
+
+    //);
+    //usuario.viento.$push(a.desc)
+
 
 
 
     console.log("velMax: " + this.body.velMax)
-    Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { cordenadas: coord } }, { new: true }, (err, usuarioDB) => {
+    Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
+            $push: {
+                cordenadas: coord,
+                velocidad: vel,
+                velMax: this.body.velMax,
+                hora: this.body.hora,
+                hora_fin: this.body.hora_fin,
+                viento: a.viento,
+                dir: a.dir,
+                temp: a.temp,
+                spot: a.spot,
+                clima: a.clima
 
-        if (err) {
 
-            console.log(usuarioDB)
-            return res.status(400).json({
-                ok: false,
-                err
+
+            }
+        }, { new: true }, (err, usuarioDB) => {
+
+            if (err) {
+
+                console.log(usuarioDB)
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            //console.log("usuario cargadossss: " + usuarioDB)
+
+            console.log("cordenadas añadidas******")
+
+            res.json({
+                ok: true,
+                usuario: usuarioDB
             });
-        }
 
-        //console.log("usuario cargadossss: " + usuarioDB)
+        })
+        /*
+        Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { velocidad: vel } }, { new: true }, (err, usuarioDB) => {
 
-        console.log("cordenadas añadidas******")
-
-        res.json({
-            ok: true,
-            usuario: usuarioDB
+            if (err) {
+                console.log("error en push velocidad")
+                console.log(usuarioDB)
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
         });
+        Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { velMax: this.body.velMax } }, { new: true }, (err, usuarioDB) => {
 
-    })
-    Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { velocidad: vel } }, { new: true }, (err, usuarioDB) => {
+            if (err) {
+                console.log("error en push velocidad")
+                console.log(usuarioDB)
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+        });
+        Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora: this.body.hora } }, { new: true }, (err, usuarioDB) => {
 
-        if (err) {
-            console.log("error en push velocidad")
-            console.log(usuarioDB)
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-    });
-    Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { velMax: this.body.velMax } }, { new: true }, (err, usuarioDB) => {
+            if (err) {
+                console.log("error en push velocidad")
+                console.log(usuarioDB)
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+        });
+        Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora_fin: this.body.hora_fin } }, { new: true }, (err, usuarioDB) => {
 
-        if (err) {
-            console.log("error en push velocidad")
-            console.log(usuarioDB)
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-    });
-    Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora: this.body.hora } }, { new: true }, (err, usuarioDB) => {
-
-        if (err) {
-            console.log("error en push velocidad")
-            console.log(usuarioDB)
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-    });
-    Usuario.findOneAndUpdate({ _id: req.usuario._id }, { $push: { hora_fin: this.body.hora_fin } }, { new: true }, (err, usuarioDB) => {
-
-        if (err) {
-            console.log("error en push velocidad")
-            console.log(usuarioDB)
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-    });
+            if (err) {
+                console.log("error en push velocidad")
+                console.log(usuarioDB)
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+        });
+        */
 });
 
 
