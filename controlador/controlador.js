@@ -89,7 +89,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
 
 
 
-    console.log("velMax: " + this.body.velMax)
+    console.log("usuario: " + this.body.nombre)
     Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
             $push: {
                 cordenadas: coord,

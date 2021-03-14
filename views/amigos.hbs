@@ -5,14 +5,14 @@
 {{> head }}
 <body onload="mostrarAmigos({{ amigos_id }})">
 
-  {{> navbar }}
+  {{> navslink}}
 
  <br><br>
 <form id ='formulario'action="/buscarAmigos" method="POST">
     
             <label for="busca">Busca a tus amigos:</label >
             <input type="search" id="buscar" name="busca">
-  <button type="button" onclick="myFunction()" id='botonOn'>Buscar</button>
+  <button type="button" onclick="busqueda()" id='botonOn'>Buscar</button>
             </form>
       
    
@@ -41,9 +41,9 @@ function mostrarAmigos(ami){
   ami.forEach( element => {
     console.log(element.nombre) 
             var newDiv = document.createElement("div")
-            newDiv.setAttribute("id", element);
+            newDiv.setAttribute("id", "div" + element);//ya llamaremos a cada boton por el -ID
 
-            newDiv.innerHTML=`<h1>${res[i]}</h1> <input type="button" id = "botonMuro"  value= "no seguir" onclick=noSeguir("${element}")> `
+            newDiv.innerHTML=`<h1>${res[i]}</h1> <input type="button" id = "${element}"  value= "No seguir" onclick=noSeguir("${element}")> `
             //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
   
             document.getElementById("div1").appendChild(newDiv);
@@ -59,7 +59,7 @@ function muestra(){
   
 }
 
-async function myFunction(){
+async function busqueda(){
 
 
     
@@ -98,7 +98,7 @@ async function myFunction(){
             var newDiv = document.createElement("div")
             newDiv.setAttribute("id", element.nombre);
 
-            newDiv.innerHTML=`<h1>${element.nombre}</h1> <input type="button" id = "botonMuro"  value= "seguir" onclick=seguir("${element._id}")> `
+            newDiv.innerHTML=`<h1>${element.nombre}</h1> <input type="button" id = "${element._id}"  value= "Seguir" onclick=seguir("${element._id}")> `
             //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
   
             document.getElementById("div1").appendChild(newDiv);
@@ -114,7 +114,7 @@ async function myFunction(){
 
 function seguir(id){
 
-        console.log("*********************************siguiendo******************************") 
+        
 
                              
   var token1 = localStorage.getItem('token');
@@ -137,12 +137,12 @@ function seguir(id){
             .then(resp => resp.text())
             .then(data => {
 
-              console.log("*********************************siguiendo******************************")
-              if(data.ok=true)
+              
+              if(data.ok=true){
 
-                console.log("*********************************siguiendo******************************")
                 
-
+                document.getElementById(`${id}`).value="siguiendo" //el nombre es el id que hay que borrar
+              }
             });
           
 
@@ -151,8 +151,6 @@ function seguir(id){
 }
 
 function noSeguir(id){
-
-        console.log("*********************************no siguiendo******************************") 
 
                              
   var token1 = localStorage.getItem('token');
@@ -170,17 +168,15 @@ function noSeguir(id){
         });
 
 
-
        fetch(req)
             .then(resp => resp.text())
             .then(data => {
+              
+              if(data.ok=true){
 
-              console.log("*********************************no siguiendo******************************")
-              if(data.ok=true)
+                document.getElementById(`${id}`).value="NO siguiendo" //el nombre es el id que hay que borrar
 
-                console.log("*********************************no siguiendo******************************")
-                
-
+              }
             });
           
 

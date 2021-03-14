@@ -2,7 +2,7 @@
 
 
 <body>
-  {{> navbar }}
+  {{> navslink }}
    
   <h2>{{ usuario }} </h2>
   <h2>{{ sesionID }}</h2>
@@ -59,8 +59,10 @@
 
             });
           
-
+            let url = '/muro';
+            abrirUrlHeader(url)
         }
+
 
     }
   
