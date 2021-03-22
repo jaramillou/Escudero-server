@@ -25,7 +25,6 @@ const mongoose = require('mongoose');
 //var sesiones = new Sesiones('jesus')
 
 
-
 app.use(require('./controlador/controlador'))
 
 app.use(express.static(__dirname + '/public'));
