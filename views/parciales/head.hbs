@@ -15,6 +15,8 @@
   
 
 
+
+
   <script>
 
       function muro(){
@@ -71,11 +73,11 @@ function abrirUrlHeader(url) {
     function bypass(url){
 
  
-      const token = localStorage.getItem('token')
-    if (token != null){
+        const token = localStorage.getItem('token')
+        if (token != null){
 
-        document.body.innerHTML=null 
-        abrirUrlHeader(url);
+            document.body.innerHTML=null 
+             abrirUrlHeader(url);
     }
     
 }

@@ -3,10 +3,10 @@
 
  <body onload="mostrarMuro({{ muro }})">
 
-    {{> navslink }}
+    {{> navslink letrero='Muro'}}
 
 
-<div class="text-center" id="div1" ><h2 id="otros" >Muro</h2></div>
+<div class="text-center" id="div1" ><h2 id="otros" >{{ usuario }}</h2></div>
 
 {{> cokies }}
 <script>
@@ -15,7 +15,7 @@
 
 
   function mostrarMuro(aux){
-    console.log(aux)
+    //console.log(aux)
       var n = [] //nos servirá como puntero o iterador de cada usuario amigo
       var horas = [] //para anotar la hora de cada iterador 
       var total = 0 //anotaremos el total de sesiones propias y de los amigos
@@ -33,40 +33,28 @@
             horas[i] = aux[i].hora[n[i]] //juntamos las horas que quedan
                         // console.log("horas en usuario== " + usuarioDB[i].nombre + " : " + horas[i])
           } else horas[i] = null
-
-
-
         }
-            //[usuarioDB[0].hora[0], usuarioDB[1].hora[0], usuarioDB[2].hora[0]]
-
+            
             var m = menor(horas)
-
-            var direccion= Number(aux[m].dir[n[m]]) + 90
-
+            var direccion=0
+            direccion= aux[m].dir[n[m]]
+            console.log("direccion = " + aux[m].dir[n[m]])
           
-
-            //console.log("tamaño de cordenadas:  " + usuarioDB[m].cordenadas[n[m]].length)
-            // for (var i = 0; i < usuarioDB[m].cordenadas[n[m]].length; i++) {
-
-            //var coord = new Cordenadas()
-                // console.log(usuarioDB[m].cordenadas[n[m]])
-            //cordenadas.setCordenadas = usuarioDB[m].cordenadas[n[m]]
             var cord = JSON.parse(aux[m].cordenadas[n[m]])
-                // var simplified = simplify(aux, 0.000000000000000000000000001)
+              
 
             var simplified = simplify(cord, 0.0001, false) //simplifico los datos con el algoritmo Douglas-Peucker para que "quepan" en la URL (~8K) 
                 //la variable tolerancia 0.0001 debería ser proporcianal al tamaño en la clase Cordenada 
-                //console.log(simplified)
-                // cordenadas.simple()
-                // };
+              
                                                                                                                                               //
             var newDiv = document.createElement("div")
-            
-            //newDiv.setAttribute("class", "container-md");
+          
             
             newDiv.setAttribute("id", aux[m].nombre);
 
-            newDiv.innerHTML= `<div><br><br>usuario: ${aux[m].nombre}<br>     ${aux[m].hora[n[m]]}  </div>      
+            newDiv.innerHTML= `<div> <a href="javascript:abrirUrlHeader('/soloUsuario/${aux[m]._id}')"><h3>${aux[m].nombre}</h3></a></div>  
+            <div> ${aux[m].hora[n[m]]}  </div>  
+              
             
             <div>
             <a href="/sesion/${n[m]}/${aux[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${JSON.stringify(simplified)}%7D)/auto/600x400?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A" class="img-fluid"/>
@@ -74,7 +62,7 @@
             <div>
             Spot: ${aux[m].spot[n[m]]}, knots:${aux[m].viento[n[m]]}, direccion${direccion}
 
-            <svg data-v-47880d39="" width="20" height="20" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate(${direccion}deg);"> 
+            <svg data-v-47880d39="" width="20" height="20" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate(${direccion }deg);"> 
         <g data-v-47880d39="" fill="#48484a">
             <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
             </path></div>
@@ -83,10 +71,6 @@
             n[m]--
 
       }
-
-
-
-
 
 }
 

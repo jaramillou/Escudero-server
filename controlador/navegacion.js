@@ -94,10 +94,8 @@ app.get('/muro', verificatoken, async(req, res) => {
         }</script></head>`
     URL_geojson += `   <body>`
     URL_geojson += `<nav>`
-    URL_geojson += `<p id="user">${usuario.nombre}</p>
-   <input type="button" id = "botonCerrar"  value= "cerrar" onclick=cerrar()>`
-    URL_geojson += '          '
-    URL_geojson += `<a href="/amigos/${usuario._id}   "><br><h2> Amigos</h2></a>`
+    URL_geojson += `<p id="user">${usuario.nombre}</p>`
+
 
     var sesion = 0
 
@@ -128,7 +126,8 @@ app.get('/muro', verificatoken, async(req, res) => {
 
         res.render('muro.hbs', {
 
-            muro: JSON.stringify(usuarioDB)
+            muro: JSON.stringify(usuarioDB),
+            usuario: body.nombre
 
 
         });
@@ -208,14 +207,13 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
 
 
 
-        //cordenadas.coordinates = usuarioDB.cordenadas[sesionID]
-
-
+        console.log(usuarioDB.velocidad[sesionID])
 
         res.render('home.hbs', { //CAMBIAR A HOME 1*******************************************
             ok: true,
             usuario: usuarioDB.nombre,
             coordinates: usuarioDB.cordenadas[sesionID],
+            velocidad: usuarioDB.velocidad[sesionID],
             velMax: usuarioDB.velMax[sesionID],
             hora: usuarioDB.hora[sesionID],
             hora_fin: usuarioDB.hora_fin[sesionID],
@@ -238,6 +236,31 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
 
 
 
+app.get('/soloUsuario/:id', verificatoken, (req, res) => { //genera el muro con todas las sesiones
 
+    let id = req.params.id;
+    Usuario.findById(id, function(err, usuarioDB) {
+
+        if (err) {
+            console.log("error en find:")
+            console.log(usuarioDB)
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+
+
+        res.render('soloUsuario.hbs', {
+
+            muro: JSON.stringify(usuarioDB),
+            usuario: usuarioDB.nombre
+
+
+        });
+
+    })
+});
 
 module.exports = app

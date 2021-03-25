@@ -69,12 +69,12 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
 
 
 
-    let vel = JSON.stringify(this.body.velocidad)
+    let vel = this.body.velocidad
     let velMax = this.body.velMax
 
     console.log(req.usuario.nombre + " este usuario con hora enviado desde IOS: " + (this.body.hora))
 
-    let coord = JSON.stringify(this.body.GeoJson)
+    let coords = this.body.GeoJson
 
 
     var a = await tiempo.climaSpot(this.body.GeoJson[0][1], this.body.GeoJson[0][0])
@@ -82,7 +82,26 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
     console.log("tiempo en: " + this.body.GeoJson[0][1] + ' , ' + this.body.GeoJson[0][0] + " = " + a.dir)
 
 
+    var fc = { "type": "FeatureCollection", "features": [] }
+    var size = 1;
 
+    for (var i = 0; i < coords.length; i += size - 1) {
+
+        var smallarray = coords.slice(i, i + size);
+        // Split the original linestring into chunks.
+        // Each chunk goes in a specific feature.
+        fc.features.push({
+            "type": "Feature",
+            // Fake elevation information.
+            "properties": { "ele": vel[i] },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": smallarray
+            }
+        })
+    }
+
+    var multstring = JSON.stringify(fc)
 
 
 
@@ -90,7 +109,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
     let direccion = Number(a.dir) + 180 //los grados de dirección meteorológicos son al revés de la flecha.
     Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
         $push: {
-            cordenadas: coord,
+            cordenadas: multstring,
             velocidad: vel,
             velMax: this.body.velMax,
             hora: this.body.hora,
