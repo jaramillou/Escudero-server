@@ -51,12 +51,12 @@
                           console.log("cordenadas  borrando elemento: " + sesionID)
                 
                          //let url = '/muro';
-                          muro()
+                         
                         }
                         else{
                           console.log("no borrado ")
                         }
-            });
+            }).then( data =>  {muro()} )
           
             
         }

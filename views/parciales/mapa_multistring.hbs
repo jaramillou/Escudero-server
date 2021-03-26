@@ -23,22 +23,30 @@ var geojson = {
 mapboxgl.accessToken = 'pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A';
 
 
-
-var coordinates = geojson.data.geometry.coordinates
-var bounds = coordinates.reduce(function(bounds, coord) {
+var coords = {{ coordinates }}
+//var coordinates = geojson.data.geometry.coordinates
+var bounds = coords.reduce(function(bounds, coord) {
             return bounds.extend(coord);
-        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+        }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
 
 
 var map = new mapboxgl.Map({
 container: 'map',
 style: 'mapbox://styles/mapbox/streets-v11',
-center: geojson.data.geometry.coordinates[0], // starting position [lng, lat]
+center: coords[0], // starting position [lng, lat]
 //center: bounds.center,
 zoom: 8 // starting zoom
 
  //   zoom: bounds.zoom
 });
+
+
+
+/*
+var marker = new mapboxgl.Marker()
+.setLngLat([coords[0], coords[1]])
+.addTo(map);
+*/
 
 /*
 map.on('load', function() {
@@ -57,7 +65,7 @@ map.on('load', function() {
     }
 }); 
 */
-var coords = {{ coordinates }}
+
 var vel = {{ velocidad }}
 map.on('load', function () {
 var fc = {"type": "FeatureCollection", "features": []}
@@ -77,7 +85,75 @@ for (var i=0; i<coords.length; i+=size-1) {
                     "coordinates": smallarray
                 }
             })
+            
 }
+ 
+map.loadImage(
+    '/assets/img/start.png',
+    function (error, image) {
+        if (error) throw error;
+        map.addImage('cat', image);
+        map.addSource('point', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                 'features': [
+                {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': coords[0]
+                }
+                }
+                ]
+            }
+        });
+        
+        map.addLayer({
+        'id': 'points',
+        'type': 'symbol',
+        'source': 'point',
+        'layout': {
+        'icon-image': 'cat',
+        'icon-size': 0.02
+        }
+        });
+    }
+);
+
+map.loadImage(
+    '/assets/img/end.jpg',
+    function (error, image) {
+        if (error) throw error;
+        map.addImage('cat2', image);
+        map.addSource('point2', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                 'features': [
+                {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': coords[coords.length-1]
+                }
+                }
+                ]
+            }
+        });
+        
+        map.addLayer({
+        'id': 'points2',
+        'type': 'symbol',
+        'source': 'point2',
+        'layout': {
+        'icon-image': 'cat2',
+        'icon-size': 0.02
+        }
+        });
+    }
+);
+
 
 map.addLayer({
         "id": "route",
@@ -120,8 +196,14 @@ map.addLayer({
             padding: 150, animate: true, duration: 3000
     
         });
-        
+/*
+        var marker1 = new mapboxgl.Marker()
+        .setLngLat(coords[0])
+        .addTo(map);
+     */   
 });
+
+
 
 </script>
 

@@ -113,16 +113,17 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
                 ok: false,
                 err
             });
+        } else {
+            console.log("cordenadas añadidas******")
+            res.json({
+                ok: true,
+                //usuario: usuarioDB
+            });
         }
 
-        //console.log("usuario cargadossss: " + usuarioDB)
 
-        console.log("cordenadas añadidas******")
 
-        res.json({
-            ok: true,
-            //usuario: usuarioDB
-        });
+
 
     })
 
@@ -166,12 +167,13 @@ app.post('/borrar/:sesionID', verificatoken, async(req, res) => {
             console.log(err);
         } else {
             console.log("cordenadas  borrado elemento: ")
+            res.json({
+                ok: true,
+            });
         }
 
     });
-    res.json({
-        ok: true,
-    });
+
 
 });
 
