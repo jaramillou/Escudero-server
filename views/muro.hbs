@@ -51,13 +51,18 @@
           
             
             newDiv.setAttribute("id", aux[m].nombre);
+            var anchoLinea='3'
+            var colorLinea='ff0000'
+            var colorLinea_2='0000ff'
 
+
+//https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0   para cambiar la caracteristicas de la imagen mapbox static imagen tipo linestring es igual a point. cambiar a URL code con https://meyerweb.com/eric/tools/dencoder/ a mano
             newDiv.innerHTML= `<div> <a href="javascript:abrirUrlHeader('/soloUsuario/${aux[m]._id}')"><h3>${aux[m].nombre}</h3></a></div>  
             <div> ${aux[m].hora[n[m]]}  </div>  
               
             
-            <div>
-            <a href="/sesion/${n[m]}/${aux[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${JSON.stringify(simplified)}%7D)/auto/600x400?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A" class="img-fluid"/>
+            <div>          
+            <a href="/sesion/${n[m]}/${aux[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22Feature%22%2C%22properties%22%3A%7B%22stroke%22%3A%22%23${colorLinea}%22%2C%20%22stroke-width%22%3A%20${anchoLinea}%7D%2C%22geometry%22%3A%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A%0A%0A%0A%0A%0A${JSON.stringify(simplified)}%7D%7D)/auto/600x400?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A" class="img-fluid"/>
             </a></div>
             <div>
             Spot: ${aux[m].spot[n[m]]}, knots:${aux[m].viento[n[m]]}, direccion${direccion}
