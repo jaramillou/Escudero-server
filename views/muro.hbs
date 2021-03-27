@@ -42,10 +42,10 @@
           
             var cord = JSON.parse(aux[m].cordenadas[n[m]])
               
-
-            var simplified = simplify(cord, 0.0001, false) //simplifico los datos con el algoritmo Douglas-Peucker para que "quepan" en la URL (~8K) 
+          
+            var simplified = simplifica(cord) //simplifico los datos con el algoritmo Douglas-Peucker para que "quepan" en la URL (~8K) 
                 //la variable tolerancia 0.0001 debería ser proporcianal al tamaño en la clase Cordenada 
-              
+          
                                                                                                                                               //
             var newDiv = document.createElement("div")
           
@@ -73,6 +73,18 @@
       }
 
 }
+
+
+  function simplifica(coord) {
+        if (coord.length > 200 && coord.length < 999) {
+            var simplified = simplify(coord, 0.00001, false)
+            return simplified
+        } else if (coord.length > 1000) {
+            var simplified = simplify(coord, 0.00002, false)
+            return simplified
+        }
+        return coord
+    }
 
 
 function menor(params) {

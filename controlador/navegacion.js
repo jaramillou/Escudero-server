@@ -69,7 +69,13 @@ app.get('/muro', verificatoken, async(req, res) => {
 
     let usuario = await Usuario.findById(req.usuario._id, function(err, usuarioDB) { //falta gestión de usuario...
 
-        // console.log("amigos req :  " + amigos)
+        if (!usuarioDB) {
+            res.render('borraToken.hbs', {
+
+                ok: true
+
+            });
+        }
 
     });
     usuario.amigos.forEach(element => {

@@ -6,10 +6,10 @@
   {{> navslink}}
 
  <br><br>
-<form id ='formulario'action="/buscarAmigos" method="POST">
+<form id ='formulario' method="POST">
     
             <label for="busca">Busca a tus amigos:</label >
-            <input type="search" id="buscar" name="busca">
+            <input type="search" id="buscar" name="busca" >
   <button type="button" onclick="busqueda()" id='botonOn'>Buscar</button>
             </form>
       
@@ -21,10 +21,16 @@
 <div id="div2"><h2 id="otros" ></h2></div>
 <div id="div1"></div>
 
-
-
-
 <script>
+document.getElementById('formulario').addEventListener('keypress', function(event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            busqueda()
+
+        }
+    });
+
+
 
 
 

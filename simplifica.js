@@ -113,6 +113,19 @@
         return points;
     }
 
+
+    function simplifica(coord) {
+        if (coord.length > 200 && coord.length < 999) {
+            var simplified = simplify(coord, 0.00001, false)
+            return simplified
+        } else if (coord.length > 1000) {
+            var simplified = simplify(coord, 0.00009, false)
+            return simplified
+        }
+        return coord
+    }
+
+
     // export as AMD module / Node module / browser or worker variable
     if (typeof define === 'function' && define.amd) define(function() { return simplify; });
     else if (typeof module !== 'undefined') {

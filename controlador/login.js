@@ -40,10 +40,11 @@ app.post('/login', function(req, res) { //pasar a login
             });
         }
         if (!usuarioDB) {
-            return res.status(400).json({
-                ok: false,
-                err: 'correo incorrecto' //luego quitar para no dar pistas
-            })
+            console.log("usuario no encontrado")
+            res.render('borraToken.hbs', {
+                ok: true,
+            });
+
         }
 
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
