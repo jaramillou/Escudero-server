@@ -71,7 +71,6 @@ app.get('/muro', verificatoken, async(req, res) => {
 
         if (!usuarioDB) {
             res.render('borraToken.hbs', {
-
                 ok: true
 
             });

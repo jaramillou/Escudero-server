@@ -62,71 +62,68 @@ app.use(express.static('public'));
 app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada al usuario
     res.header("Access-Control-Allow-Origin", '*');
     this.body = req.body
+    if (this.body.GeoJson.length < 2) { //no guardamos cuando son menosde dos coordendas, por fallo en conversion multystring
+        res.json({
+            ok: false,
+            //usuario: usuarioDB
+        });
+    } else {
+
+
+        let vel = JSON.stringify(this.body.velocidad)
+        let velMax = this.body.velMax
+
+        console.log(req.usuario.nombre + " este usuario con hora enviado desde IOS: " + (this.body.hora))
+
+        let coord = JSON.stringify(this.body.GeoJson)
+
+
+        var a = await tiempo.climaSpot(this.body.GeoJson[0][1], this.body.GeoJson[0][0])
+
+        console.log("tiempo en: " + this.body.GeoJson[0][1] + ' , ' + this.body.GeoJson[0][0] + " = " + a.dir)
 
 
 
 
 
 
-
-    let vel = JSON.stringify(this.body.velocidad)
-    let velMax = this.body.velMax
-
-    console.log(req.usuario.nombre + " este usuario con hora enviado desde IOS: " + (this.body.hora))
-
-    let coord = JSON.stringify(this.body.GeoJson)
-
-
-    var a = await tiempo.climaSpot(this.body.GeoJson[0][1], this.body.GeoJson[0][0])
-
-    console.log("tiempo en: " + this.body.GeoJson[0][1] + ' , ' + this.body.GeoJson[0][0] + " = " + a.dir)
-
-
-
-
-
-
-    console.log("usuario: " + this.body.nombre)
-    let direccion = Number(a.dir) + 180 //los grados de dirección meteorológicos son al revés de la flecha.
-    Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
-        $push: {
-            cordenadas: coord,
-            velocidad: vel,
-            velMax: this.body.velMax,
-            hora: this.body.hora,
-            hora_fin: this.body.hora_fin,
-            viento: a.viento,
-            dir: direccion,
-            temp: a.temp,
-            spot: a.spot,
-            clima: a.clima
+        console.log("usuario: " + this.body.nombre)
+        let direccion = Number(a.dir) + 180 //los grados de dirección meteorológicos son al revés de la flecha.
+        Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
+            $push: {
+                cordenadas: coord,
+                velocidad: vel * 1.94384,
+                velMax: this.body.velMax * 1.94384,
+                hora: this.body.hora,
+                hora_fin: this.body.hora_fin,
+                viento: a.viento * 1.94384,
+                dir: direccion,
+                temp: a.temp,
+                spot: a.spot,
+                clima: a.clima
 
 
 
-        }
-    }, { new: true }, (err, usuarioDB) => {
+            }
+        }, { new: true }, (err, usuarioDB) => {
 
-        if (err) {
+            if (err) {
 
-            console.log("error al grabar coordenadas de usuario" + usuarioDB)
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        } else {
-            console.log("cordenadas añadidas******")
-            res.json({
-                ok: true,
-                //usuario: usuarioDB
-            });
-        }
+                console.log("error al grabar coordenadas de usuario" + usuarioDB)
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            } else {
+                console.log("cordenadas añadidas******")
+                res.json({
+                    ok: true,
+                    //usuario: usuarioDB
+                });
+            }
 
-
-
-
-
-    })
-
+        })
+    } //else
 });
 
 
