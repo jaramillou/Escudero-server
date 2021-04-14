@@ -33,8 +33,9 @@
             <input type="password" id="passw" name="password" required>
         </li>
     </ul>
-    <button type="button" onclick="myFunction()" id='botonOn'>on</button>
+    <button type="button" onclick="myFunction()" id='botonOn'>Entrar</button>
 </form>
+<div id="div1">Introduce tu usuario y contraseña</div>
 <a href="/nuevoUsuario">Nuevo usuario</a>
 <script>
 
@@ -54,6 +55,18 @@ async function myFunction(){
     }
     
     let token = await postData('/login', datos)
+    console.log(token)
+    if(token == null){ 
+        //alert("usuairo Malo")
+         var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", "divAux");
+
+            newDiv.innerHTML='<p style="color:#FF0000";>introduce correctametne tu usuario y contrseña contraseña</p>'
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div1").appendChild(newDiv);
+    }
+
     
     // Headers.apply
     
@@ -74,7 +87,13 @@ if(token2!=null)  {
     window.onload = bypass('/muro');
 }
 
-async function postData(url = '', data = {}) {                      //pasar a head
+
+
+
+
+async function postData(url = '', data = {}) {    
+    
+    var token = null                  //pasar a head
   // Opciones por defecto estan marcadas con un *
   const response = await fetch(url, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -91,7 +110,7 @@ async function postData(url = '', data = {}) {                      //pasar a he
      // body data type must match "Content-Type" header
   }).then(response => response.json())
     .then(json => {
-        let token=json.token
+        token=json.token
         if(token!=null){
             
             localStorage.setItem('token', json.token);
@@ -99,11 +118,13 @@ async function postData(url = '', data = {}) {                      //pasar a he
             let url = '/muro';
             abrirUrlHeader(url)
             
-        }
+            
+        }else return null
+     
         
         })
     .catch(err => {return console.log(err)});
-  
+    return token;
 }
 </script>
 </body>

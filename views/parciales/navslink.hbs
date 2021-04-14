@@ -3,7 +3,8 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 {{#if letrero}}
-                <a class="navbar-brand" href="javascript:muro()"><h1>{{ letrero }} </h1></a>
+                <a class="navbar-brand" href="javascript:muro()"><h2><em><strong><font face="Comic Sans MS,Arial,Verdana">{{ letrero }}</font></strong></em></h2></a>   
+               <!-- <a class="navbar-brand" href="javascript:muro()"><img src='/assets/img/escudero.png' width="120" height="60" alt="user image" /</a> -->
                 {{else}}
                 <a class="navbar-brand" href="javascript:muro()"><h1>&lt;</h1></a>
                 {{/if}}
@@ -27,7 +28,7 @@
                 
                      </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="javascript:cerrar()"><h1>Cerrar</h1></a>
+                        <a class="nav-link" href="javascript:cerrar()"><img src='/assets/img/salir.png' width="40" height="40" alt="user image" /></a>
                      </li>
               </ul>
         </div>
