@@ -34,26 +34,34 @@ app.post('/login', function(req, res) { //pasar a login
 
     Usuario.findOne({ email: body.email }, (err, usuarioDB) => {
         if (err) {
+            console.log("usuario no encontrado error mongo")
             return res.status(500).json({ // fallo mongoDB
                 ok: false,
                 err
             });
         }
         if (!usuarioDB) {
-            console.log("usuario no encontrado")
-            res.render('borraToken.hbs', {
-                ok: true,
-            });
+            console.log("usuario no encontrado no existe")
+                //res.render('borraToken.hbs', {
+                //   ok: true,
+                //});
+            return res.status(400).json({
+                ok: false,
+                err: `usuario no existe`,
+
+            })
 
         }
 
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
+            console.log("usuario no encontrado contraseña mal")
             return res.status(400).json({
                 ok: false,
                 err: `cotraseña incorrecta `,
 
             })
         }
+        console.log("usuario encontrado")
         usuarioDB.cordenadas = null
         usuarioDB.velocidad = null
         usuarioDB.hora = null

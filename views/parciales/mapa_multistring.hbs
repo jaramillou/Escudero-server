@@ -172,8 +172,8 @@ map.addLayer({
             "property": "ele",
             "type": "exponential",
             "stops": [
-                [0, "#FFFF00"],
-                [20, "#FF0000"]
+                [-3, "#FFFF00"],
+                [50, "#FF0000"]
         ]},
             "line-width": 8
         }
@@ -208,21 +208,20 @@ map.addLayer({
 </script>
 
 <p>hora inicio: {{ hora }}</p>
-<p>hora fin: {{ hora_fin }}</p>
 <p>tiempo navegado: {{ sesion }} </p>
 <p>velocidad máxima: {{ velMax}} </p>
 <br>
 <p>Spot: {{ spot}} </p>
-<p>Nudos: {{ viento}} </p>
-<p>Direccion: <svg data-v-47880d39="" width="30" height="30" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate({{ dir }}deg);">
+<p>Nudos: {{ viento}} 
+<svg data-v-47880d39="" width="30" height="30" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate({{ dir }}deg);">
         <g data-v-47880d39="" fill="#48484a">
             <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
             </path>
             
-
+</g></svg></p>
             </path></g></svg>
-<p>Temperatura: {{ temp }} </p>
-<p>clima: {{ clima }} </p>
+<p>Temperatura: {{ temp }} 
+,clima: {{ clima }} </p>
 
 
 

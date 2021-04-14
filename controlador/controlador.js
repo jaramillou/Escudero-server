@@ -92,7 +92,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
         Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
             $push: {
                 cordenadas: coord,
-                velocidad: vel * 1.94384,
+                velocidad: vel, // * 1.94384,
                 velMax: this.body.velMax * 1.94384,
                 hora: this.body.hora,
                 hora_fin: this.body.hora_fin,
