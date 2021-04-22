@@ -89,14 +89,15 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
 
         console.log("usuario: " + this.body.nombre)
         let direccion = Number(a.dir) + 180 //los grados de dirección meteorológicos son al revés de la flecha.
+        let vMax = this.body.velMax * 1.94384
         Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
             $push: {
                 cordenadas: coord,
                 velocidad: vel, // * 1.94384,
-                velMax: this.body.velMax * 1.94384,
+                velMax: vMax.toFixed(2),
                 hora: this.body.hora,
                 hora_fin: this.body.hora_fin,
-                viento: a.viento * 1.94384,
+                viento: Math.round(a.viento * 1.94384),
                 dir: direccion,
                 temp: a.temp,
                 spot: a.spot,
