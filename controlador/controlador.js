@@ -106,7 +106,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
                 tabla_usada: "-",
                 aleta_usada: "-"
 
-
+                //ssc
 
             }
         }, { new: true }, (err, usuarioDB) => {
