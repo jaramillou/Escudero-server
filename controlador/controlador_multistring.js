@@ -180,6 +180,11 @@ app.post('/borrar/:sesionID', verificatoken, async(req, res) => {
     usuario.temp.splice(sesionID, 1)
     usuario.clima.splice(sesionID, 1)
     usuario.spot.splice(sesionID, 1)
+    usuario.vela_usada.splice(sesionID, 1)
+    usuario.tabla_usada.splice(sesionID, 1)
+    usuario.aleta_usada.splice(sesionID, 1)
+
+
 
 
 
