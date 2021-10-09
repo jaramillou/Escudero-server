@@ -41,27 +41,7 @@ app.set('title', 'ESCUDERO')
 
 
 
-/*
-function menor(params) {
-    var aux = params[0]
-    var pos = 0
-    for (var i = 0; i < params.length; i++) {
 
-        if (aux < params[i] || aux == null) {
-            // console.log(aux + " > " + params[i] + "cambia pos...")
-            aux = params[i]
-            pos = i
-
-        } else {
-            // console.log(aux + " < " + params[i])
-
-
-        }
-
-    }
-    return pos
-}
-*/
 app.get('/muro', verificatoken, async(req, res) => {
 
     let body = req.usuario
@@ -184,8 +164,8 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
     Usuario.findById(id, function(err, usuarioDB) { //falta gestión de usuario...
 
         if (err) {
-            console.log("error en find, campo: " + id)
-            console.log(usuarioDB)
+            // console.log("error en find, campo: " + id)
+            // console.log(usuarioDB)
             return res.status(400).json({
                 ok: false,
                 err
@@ -212,7 +192,13 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
 
 
 
-        console.log(usuarioDB.velocidad[sesionID])
+
+
+        var aux_vela_selecionada = 0;
+        console.log(JSON.stringify(usuarioDB.velas))
+        if (usuarioDB.vela_usada[sesionID].replace(/['"]+/g, '') != "-") { aux_vela_selecionada = 1 }
+
+
 
         res.render('home.hbs', { //CAMBIAR A HOME 1*******************************************
             ok: true,
@@ -229,7 +215,16 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
             dir: usuarioDB.dir[sesionID],
             clima: usuarioDB.clima[sesionID],
             spot: usuarioDB.spot[sesionID],
-            temp: usuarioDB.temp[sesionID]
+            temp: usuarioDB.temp[sesionID],
+            aux_vela_selecionada,
+            velas: JSON.stringify(usuarioDB.velas),
+            vela_usada: usuarioDB.vela_usada[sesionID].replace(/['"]+/g, ''),
+            tablas: JSON.stringify(usuarioDB.tablas),
+            tabla_usada: usuarioDB.tabla_usada[sesionID].replace(/['"]+/g, ''),
+            aletas: JSON.stringify(usuarioDB.aletas),
+            aleta_usada: usuarioDB.aleta_usada[sesionID].replace(/['"]+/g, ''),
+
+
 
 
         });
@@ -248,7 +243,7 @@ app.get('/soloUsuario/:id', verificatoken, (req, res) => { //genera el muro con 
 
         if (err) {
             console.log("error en find:")
-            console.log(usuarioDB)
+                //console.log(usuarioDB)
             return res.status(400).json({
                 ok: false,
                 err

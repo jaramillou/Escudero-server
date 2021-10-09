@@ -24,7 +24,7 @@
         if (aux[i]) {
           n[i] = aux[i].hora.length - 1 //llevará la cuenta de los que ya se han puesto en cada vector
           total += aux[i].hora.length //número total de sesiones de los amiguetes
-          console.log("sesiones de cada usuariuo== " + aux[i].nombre + " : " + n[i])
+          //console.log("sesiones de cada usuariuo== " + aux[i].nombre + " : " + n[i])
             }
         }
      for (var j = total - 1; j > -1; j--) { ///todos los campos de los amigos
@@ -38,7 +38,35 @@
             var m = menor(horas)
             var direccion=0
             direccion= aux[m].dir[n[m]]
-            console.log("direccion = " + aux[m].dir[n[m]])
+         // var sail= JSON.stringify([m].vela_usada[n[m]]).split("~");
+          var sail= aux[m].vela_usada[n[m]].replace(/['"]+/g, '').split("~");
+          var board= aux[m].tabla_usada[n[m]].replace(/['"]+/g, '').split("~");
+          // console.log("vela = " + sail)
+           
+
+           var vela="-";
+             if(sail != "-"){
+               vela = sail[1]
+               console.log("vela = " + vela)
+             }else{ 
+               vela = "-"
+              console.log("vela = " + vela)
+             
+             }
+
+             var tabla="-";
+             if(board != "-"){
+               tabla = board[1]
+               console.log("vela = " + tabla)
+             }else{ 
+               tabla = "-"
+              console.log("vela = " + tabla)
+             
+             }
+            
+           
+           
+           // console.log("vela = " + vela)
           
             var cord = JSON.parse(aux[m].cordenadas[n[m]])
               
@@ -87,8 +115,9 @@
                
                   <div class="col-md-4"><p class="text-sm-left"> ${aux[m].hora[n[m]]},</p></div>
                   
-                
-                  <div class="col-md-2"></div>
+               
+                  <div class="col-md-2"><a href="javascript:abrirUrlHeader('/velaUsuario/${n[m]}')">${vela}</a> <a href="javascript:abrirUrlHeader('/velaUsuario/${n[m]}')">${tabla}</a> </div>
+
               
               </div>
            </div>

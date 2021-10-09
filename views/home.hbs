@@ -1,7 +1,8 @@
 {{> head }}
+{{> aparejo }}
 
 
-<body>
+<body onLoad="desplegable_velas()">
   {{> navslink }}
    
   <h2>{{ usuario }} </h2>
@@ -9,14 +10,46 @@
     {{> mapa_multistring }}
     <input type="button" id = "botonBorrar"  value= "borrar" onclick="borrar({{ sesionID}})">
     <!--<input type="button" id = "botonCerrar"  value= "cerrar" onclick=cerrar()>-->
+
+
+
+    
+
+ 
+
+<div id="div1"></div>
+<p id ="velas" hidden >{{ velas }}</p>
+<p id ="tablas" hidden>{{ tablas }}</p>
+<p hidden id ="aletas">{{ aletas }}</p>
+<p>vela seleccionada: {{ vela_usada }}</p>
+<p>tabla seleccionada: {{ tabla_usada }}</p>
+<p>aleta seleccionada: {{ aleta_usada }}</p>
+<p>hora inicio: {{ hora }}</p>
+<p>tiempo navegado: {{ sesion }} </p>
+<p>velocidad máxima: {{ velMax}} </p>
+<br>
+<p>Spot: {{ spot}} </p>
+<p>Nudos: {{ viento}} 
+<svg data-v-47880d39="" width="30" height="30" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate({{ dir }}deg);">
+        <g data-v-47880d39="" fill="#48484a">
+            <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
+            </path>
+            
+</g></svg></p>
+            </path></g></svg>
+<p>Temperatura: {{ temp }} 
+,clima: {{ clima }} </p>
+<div id="div2"></div>
+
+<!--
+<p>Tiempo en planeo: </p>
+<p>porcentaje de planeo: </p>
+<p>comentarios: </p><br>
+
+<p>Usuario que han navegado en este spot hoy</p>
+
+-->
 <script>
-
-
-
-
-
-
-
 
     function borrar(sesionID){
 

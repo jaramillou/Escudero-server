@@ -108,6 +108,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
     console.log("usuario: " + this.body.nombre)
     let direccion = Number(a.dir) + 180 //los grados de dirección meteorológicos son al revés de la flecha.
     Usuario.findOneAndUpdate({ _id: req.usuario._id }, {
+
         $push: {
             cordenadas: multstring,
             velocidad: vel,
@@ -118,11 +119,12 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
             dir: direccion,
             temp: a.temp,
             spot: a.spot,
-            clima: a.clima
-
-
-
+            clima: a.clima,
+            vela_usada: "-",
+            tabla_usada: "-",
+            aleta_usada: "-"
         }
+
     }, { new: true }, (err, usuarioDB) => {
 
         if (err) {
@@ -178,6 +180,8 @@ app.post('/borrar/:sesionID', verificatoken, async(req, res) => {
     usuario.temp.splice(sesionID, 1)
     usuario.clima.splice(sesionID, 1)
     usuario.spot.splice(sesionID, 1)
+
+
 
 
     usuario.save(function(err) {

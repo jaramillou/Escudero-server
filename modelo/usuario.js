@@ -78,7 +78,34 @@ let usuarioSchema = new Schema({
     },
     spot: {
         type: [String]
-    }
+    },
+
+    velas: {
+        type: [String]
+    },
+
+    vela_usada: {
+        type: [String]
+    },
+
+    tablas: {
+        type: [String]
+    },
+
+    tabla_usada: {
+        type: [String]
+    },
+
+    aletas: {
+        type: [String]
+    },
+
+    aleta_usada: {
+        type: [String]
+    },
+
+
+
 
 });
 

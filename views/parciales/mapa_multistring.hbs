@@ -24,6 +24,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxc
 
 
 var coords = {{ coordinates }}
+//var velas = {{ velas }}
 //var coordinates = geojson.data.geometry.coordinates
 var bounds = coords.reduce(function(bounds, coord) {
             return bounds.extend(coord);
@@ -204,34 +205,34 @@ map.addLayer({
      */   
 });
 
+//Codigo a Ejecutar al Cargar la Pagina
+function myOnLoad() {
+ cargar_velas()
+}
 
+// funcion para Cargar Provincias al campo <select>
+function cargar_velas() {
+ var array = ["Cantabria", "Asturias", "Galicia", "Andalucia", "Extremadura"];
+
+ // Ordena el Array Alfabeticamente, es muy facil ;)):
+ array.sort();
+
+ addOptions("velas", array);
+}
+
+// Rutina para agregar opciones a un <select>
+function addOptions(domElement, array) {
+ var select = document.getElementsByName(domElement)[0];
+
+ for (value in array) {
+  var option = document.createElement("option");
+  option.text = array[value];
+  select.add(option);
+ }
+}
 
 </script>
 
-<p>hora inicio: {{ hora }}</p>
-<p>tiempo navegado: {{ sesion }} </p>
-<p>velocidad máxima: {{ velMax}} </p>
-<br>
-<p>Spot: {{ spot}} </p>
-<p>Nudos: {{ viento}} 
-<svg data-v-47880d39="" width="30" height="30" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate({{ dir }}deg);">
-        <g data-v-47880d39="" fill="#48484a">
-            <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
-            </path>
-            
-</g></svg></p>
-            </path></g></svg>
-<p>Temperatura: {{ temp }} 
-,clima: {{ clima }} </p>
 
 
 
- 
-<!--
-<p>Tiempo en planeo: </p>
-<p>porcentaje de planeo: </p>
-<p>comentarios: </p><br>
-
-<p>Usuario que han navegado en este spot hoy</p>
-
--->
