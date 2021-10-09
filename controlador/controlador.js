@@ -45,7 +45,7 @@ app.use(require('./login.js'))
 app.use(require('./nuevoUsuario.js'))
 app.use(require('./navegacion.js'))
 app.use(require('./amigos.js'))
-app.use(require('./velas.js'))
+app.use(require('./Velas.js'))
 
 
 app.use(express.static('public'));
