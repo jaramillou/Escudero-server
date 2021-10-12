@@ -49,6 +49,12 @@ let usuarioSchema = new Schema({
     velocidad: {
         type: [String]
     },
+    direccion: {
+        type: [String]
+    },
+    altitud: {
+        type: [String]
+    },
     hora: {
         type: [String]
     },

@@ -2,7 +2,8 @@
 {{> aparejo }}
 
 
-<body onLoad="desplegable_velas()">
+<!-- <body onLoad="desplegable_velas()">   -->
+  <body onLoad="iniciador()">
   {{> navslink }}
    
   <h2>{{ usuario }} </h2>
@@ -20,6 +21,7 @@
 <div id="div1"></div>
 <p id ="velas" hidden >{{ velas }}</p>
 <p id ="tablas" hidden>{{ tablas }}</p>
+<p id ="propia" hidden >{{ propia }}</p>
 <p hidden id ="aletas">{{ aletas }}</p>
 <p>vela seleccionada: {{ vela_usada }}</p>
 <p>tabla seleccionada: {{ tabla_usada }}</p>
@@ -51,14 +53,37 @@
 -->
 <script>
 
+
+  function iniciador(){
+
+        var propia =  {{ propia }}
+        //let propia = document.getElementById("propia");
+        console.log("iniciadora: " + propia)
+        if(propia == 1){
+          desplegable_velas()
+          console.log("sesión propia")
+        }
+        else{
+          var boton = document.getElementById("botonBorrar");
+          boton.onclick=""
+          console.log("sesión ajena")
+        }
+
+
+  }
+  
+ 
+
     function borrar(sesionID){
 
         console.log("*********************************borrando******************************") 
 
                             
          var token1 = localStorage.getItem('token');
+    
+         //console.log("id: " + id  + ", token.id: " + token1)
          if (token1 != null) {           //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
-            console.log("*********************************siiii borrando******************************")
+            //console.log("*********************************siiii borrando******************************")
             let h = new Headers();
             h.append('authorization', `${token1}`);
             let req = new Request(`/borrar/${sesionID}`, {

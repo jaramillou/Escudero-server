@@ -43,18 +43,18 @@ var vela_sel =  {{ aux_vela_selecionada }}   //quita las puñeteras comillas de 
   var newDiv = document.createElement("div")
   newDiv.innerHTML=` <input type="button"  value= "Guardar material" onclick= carga_vela()> `
 
-if(vela_sel != 0){
-  document.getElementById("div2").appendChild(sel1);
-  document.getElementById("div2").appendChild(sel2);
-  //document.getElementById("div2").appendChild(sel3);
-
-  document.getElementById("div2").appendChild(newDiv);
-}else{
+if(vela_sel != 1){
   document.getElementById("div1").appendChild(sel1);
-    document.getElementById("div2").appendChild(sel2);
+  document.getElementById("div1").appendChild(sel2);
   //document.getElementById("div2").appendChild(sel3);
 
   document.getElementById("div1").appendChild(newDiv);
+}else{
+  document.getElementById("div2").appendChild(sel1);
+    document.getElementById("div2").appendChild(sel2);
+  //document.getElementById("div2").appendChild(sel3);
+
+  document.getElementById("div2").appendChild(newDiv);
 }
 
  

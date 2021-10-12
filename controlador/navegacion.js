@@ -155,13 +155,20 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
     //res.header("Access-Control-Allow-Origin", '*');
 
     let sesionID = req.params.sesion_id; //será el número de sesión
-    let id = req.params.id;
+    let id_solicitada = req.params.id;
+    let id_propia = req.usuario._id; //el token siempre identifica al solicitante
+    var propia = 1;
+    if (id_propia != id_solicitada) {
+        propia = 0;
+    }
+    console.log("propia: " + propia + ", ids: " + id_propia + ", " + id_solicitada)
+
     //leerfichero de sesiones elegida en sesion_id
 
     //let body = req.usuario
     //console.log("parametros:: " + req.params.id)
 
-    Usuario.findById(id, function(err, usuarioDB) { //falta gestión de usuario...
+    Usuario.findById(id_solicitada, function(err, usuarioDB) { //falta gestión de usuario...
 
         if (err) {
             // console.log("error en find, campo: " + id)
@@ -195,7 +202,7 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
 
 
         var aux_vela_selecionada = 0;
-        console.log(JSON.stringify(usuarioDB.velas))
+        //console.log(JSON.stringify(usuarioDB.velas))
         if (usuarioDB.vela_usada[sesionID].replace(/['"]+/g, '') != "-") { aux_vela_selecionada = 1 }
 
 
@@ -210,7 +217,9 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
             hora_fin: usuarioDB.hora_fin[sesionID],
             sesion: sesion,
             sesionID,
-            id,
+            id_propia, //no usada
+            id_solicitada, //no usada
+            propia,
             viento: usuarioDB.viento[sesionID],
             dir: usuarioDB.dir[sesionID],
             clima: usuarioDB.clima[sesionID],
