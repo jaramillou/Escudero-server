@@ -43,31 +43,11 @@ zoom: 8 // starting zoom
 
 
 
-/*
-var marker = new mapboxgl.Marker()
-.setLngLat([coords[0], coords[1]])
-.addTo(map);
-*/
 
-/*
-map.on('load', function() {
-    map.addSource('route',geojson);
-    map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': 'route',
-        'layout': {
-        'line-join': 'round',
-        'line-cap': 'round'
-        },
-        'paint': {
-        'line-color': 'RED',
-        'line-width': 5
-    }
-}); 
-*/
 
 var vel = {{ velocidad }}
+var direccion = {{ direccion }}
+//let num_trasluchadas = trasluchadas(direccion)
 map.on('load', function () {
 var fc = {"type": "FeatureCollection", "features": []}
 var size = 2;
@@ -86,7 +66,7 @@ for (var i=0; i<coords.length; i+=size-1) {
                     "coordinates": smallarray
                 }
             })
-            
+          
 }
  
 map.loadImage(
@@ -208,6 +188,7 @@ map.addLayer({
 //Codigo a Ejecutar al Cargar la Pagina
 function myOnLoad() {
  cargar_velas()
+ var num_trasluchadas = trasluchadas()
 }
 
 // funcion para Cargar Provincias al campo <select>
@@ -231,8 +212,18 @@ function addOptions(domElement, array) {
  }
 }
 
+
+
+
+
+
+function trasluchadas(direccion){
+    
+
+    for (var i=0; i<coords.length; i+=size-1) {
+            console.log(direccion[i])
+
+    }
+}
+
 </script>
-
-
-
-

@@ -68,6 +68,8 @@ app.post('/login', function(req, res) { //pasar a login
         usuarioDB.hora_fin = null
         usuarioDB.descripcion = null
         usuarioDB.velMax = null
+        usuarioDB.direccion = null
+        usuarioDB.altitud = null
             //usuarioDB.amigos = null
         usuarioDB.viento = null
         usuarioDB.dir = null

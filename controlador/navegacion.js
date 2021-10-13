@@ -212,6 +212,7 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
             usuario: usuarioDB.nombre,
             coordinates: usuarioDB.cordenadas[sesionID],
             velocidad: usuarioDB.velocidad[sesionID],
+            direccion: usuarioDB.direccion[sesionID],
             velMax: usuarioDB.velMax[sesionID],
             hora: usuarioDB.hora[sesionID],
             hora_fin: usuarioDB.hora_fin[sesionID],

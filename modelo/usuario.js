@@ -49,6 +49,7 @@ let usuarioSchema = new Schema({
     velocidad: {
         type: [String]
     },
+    //*********************************************no se te olvide quitar en login.js si metes un nuevo campo largo */
     direccion: {
         type: [String]
     },

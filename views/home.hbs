@@ -55,7 +55,8 @@
 
 
   function iniciador(){
-
+          var direccion = {{ direccion }}
+         var num_trasluchadas = trasluchadas(direccion)
         var propia =  {{ propia }}
         //let propia = document.getElementById("propia");
         console.log("iniciadora: " + propia)
@@ -121,6 +122,20 @@
 
 
     }
+
+
+
+
+    function trasluchadas(direccion){
+    
+      var dir_viento = {{ dir }}
+      console.log("viento = " + dir_viento)
+    for (var i=0; i<direccion.length; i++) {
+            console.log(direccion[i])
+            
+
+    }
+}
   
 </script>
 
