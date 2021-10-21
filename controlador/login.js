@@ -70,7 +70,7 @@ app.post('/login', function(req, res) { //pasar a login
         usuarioDB.velMax = null
         usuarioDB.direccion = null
         usuarioDB.altitud = null
-            //usuarioDB.amigos = null
+        usuarioDB.amigos = null
         usuarioDB.viento = null
         usuarioDB.dir = null
         usuarioDB.temp = null

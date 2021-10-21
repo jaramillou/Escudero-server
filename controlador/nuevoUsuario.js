@@ -40,6 +40,14 @@ app.get('/nuevoUsuario', (req, res) => {
 });
 
 
+app.get('/nuevo', (req, res) => {
+
+
+    res.render('login.hbs', {
+        ok: true,
+    });
+});
+
 
 app.post('/nuevo', function(req, res) { //Crea un usuario nuevo con correo distinto
     /*
