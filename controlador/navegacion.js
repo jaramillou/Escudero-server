@@ -205,7 +205,7 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
         //console.log(JSON.stringify(usuarioDB.velas))
         if (usuarioDB.vela_usada[sesionID].replace(/['"]+/g, '') != "-") { aux_vela_selecionada = 1 }
 
-
+        console.log("distancia === " + usuarioDB.distancia[sesionID])
 
         res.render('home.hbs', { //CAMBIAR A HOME 1*******************************************
             ok: true,
@@ -217,6 +217,7 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
             hora: usuarioDB.hora[sesionID],
             hora_fin: usuarioDB.hora_fin[sesionID],
             distancia: usuarioDB.distancia[sesionID],
+
             sesion: sesion,
             sesionID,
             id_propia, //no usada

@@ -163,7 +163,7 @@ app.post('/borrar/:sesionID', verificatoken, async(req, res) => {
     usuario.hora_fin.splice(sesionID, 1)
     usuario.velMax.splice(sesionID, 1)
     usuario.descripcion.splice(0, 1)
-    usuario.distancia.splice(0, 1)
+    usuario.distancia.splice(sesionID, 1)
     usuario.viento.splice(sesionID, 1)
     usuario.dir.splice(sesionID, 1)
     usuario.temp.splice(sesionID, 1)
