@@ -132,14 +132,18 @@
 
   function simplifica(coord) {
         if (coord.length > 200 && coord.length < 999) {
-            var simplified = simplify(coord, 0.0001, false)
+            var simplified = simplify(coord, 0.00001, false)
             return simplified
         } else if (coord.length > 1000 && coord.length < 1999) {
-            var simplified = simplify(coord, 0.0002, false)
+            var simplified = simplify(coord, 0.00004, false)
+            return simplified
+        
+         } else if (coord.length > 2000 && coord.length < 3999) {
+            var simplified = simplify(coord, 0.0004, false)
             return simplified
         }
-        else if (coord.length > 2000) {
-            var simplified = simplify(coord, 0.00009, false)
+        else if (coord.length > 4000) {
+            var simplified = simplify(coord, 0.0001, false)
             return simplified
         }
         return coord

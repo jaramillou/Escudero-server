@@ -27,6 +27,7 @@
 <p>tabla seleccionada: {{ tabla_usada }}</p>
 <p>aleta seleccionada: {{ aleta_usada }}</p>
 <p>hora inicio: {{ hora }}</p>
+<p>distancia: {{ distancia }}</p>
 <p>tiempo navegado: {{ sesion }} </p>
 <p>velocidad máxima: {{ velMax}} </p>
 <br>
@@ -128,10 +129,13 @@
 
     function trasluchadas(direccion){
     
-      var dir_viento = {{ dir }}
+      var dir_viento = {{ dir }}  //hay que hacer modulo 360 
       console.log("viento = " + dir_viento)
-    for (var i=0; i<direccion.length; i++) {
+
+
+    for (var i=0; i<direccion.length - 1; i++) {
             console.log(direccion[i])
+            if(direccion[i] - )
             
 
     }

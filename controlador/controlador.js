@@ -101,6 +101,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
                 velMax: vMax.toFixed(2),
                 hora: this.body.hora,
                 hora_fin: this.body.hora_fin,
+                distancia: this.body.distancia,
                 viento: Math.round(a.viento * 1.94384),
                 dir: direccion,
                 temp: a.temp,
@@ -156,10 +157,13 @@ app.post('/borrar/:sesionID', verificatoken, async(req, res) => {
 
     usuario.cordenadas.splice([sesionID], 1)
     usuario.velocidad.splice([sesionID], 1) //reparar velocidad en matriz como cordenadas
+    usuario.altitud.splice([sesionID], 1)
+    usuario.direccion.splice([sesionID], 1)
     usuario.hora.splice(sesionID, 1)
     usuario.hora_fin.splice(sesionID, 1)
     usuario.velMax.splice(sesionID, 1)
     usuario.descripcion.splice(0, 1)
+    usuario.distancia.splice(0, 1)
     usuario.viento.splice(sesionID, 1)
     usuario.dir.splice(sesionID, 1)
     usuario.temp.splice(sesionID, 1)
