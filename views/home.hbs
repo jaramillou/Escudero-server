@@ -27,8 +27,8 @@
 <p>tabla seleccionada: {{ tabla_usada }}</p>
 <p>aleta seleccionada: {{ aleta_usada }}</p>
 <p>hora inicio: {{ hora }}</p>
-<p>distancias: {{ distancia }}</p>
 <p>tiempo navegado: {{ sesion }} </p>
+<p>distancia: {{ distancia }} </p>
 <p>velocidad máxima: {{ velMax}} </p>
 <br>
 <p>Spot: {{ spot}} </p>
@@ -128,19 +128,49 @@
 
 
     function trasluchadas(direccion){
-    
-      var dir_viento = {{ dir }}  //hay que hacer modulo 360 
+      var inicio = 5
+      var tras_arriba = 0
+      var tras_abajo = 0
+      var velocidad = {{ velocidad }}
+      var dir_viento = {{ dir }}
+      if(dir_viento > 360) dir_viento = Math.abs(dir_viento - 360)
       console.log("viento = " + dir_viento)
 
-
-    for (var i=0; i<direccion.length - 1; i++) {
+    for (var i=0; i<direccion.length; i++) {
             console.log(direccion[i])
-            if(direccion[i] - )
+
+            if(Math.abs(direccion[i] - dir_viento) < 10 && i > 10 && i < direccion.length - 10)
             
+                if(direccion[i - inicio] - dir_viento > 45 && direccion[i - inicio - 2] - dir_viento > 45 && direccion[i + inicio] - dir_viento < 45 && velocidad[i - inicio] > 10 ){
+                  console.log("trasluchada*****************************************************************arriba");
+                  tras_arriba++;
+                }
+
+                if(direccion[i -inicio] - dir_viento < 45 && direccion[i -inicio - 2] - dir_viento < 45 && direccion[i + inicio] - dir_viento > 45 && velocidad[i - inicio] > 10 ){
+                  console.log("trasluchada*****************************************************************abajo");
+                  tras_abajo++;
+                }
 
     }
+    console.log("trasluchadas arribaa*****************" + tras_arriba);
+    console.log("trasluchadas abajoo*****************" + tras_abajo);
+    console.log("durante los segundos*****************" + direccion.length);
 }
   
+/*
+  function antes(direccion,cambio){
+    var inicio = 5
+    for(var i = cambio; i > cambio - inicio && i <= 0; i--){
+      direccion[i - inicio] - dir_viento >
+      
+      
+       45
+
+    }
+  }
+*/
+
+
 </script>
 
     

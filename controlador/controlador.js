@@ -101,7 +101,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
                 velMax: vMax.toFixed(2),
                 hora: this.body.hora,
                 hora_fin: this.body.hora_fin,
-                distancia: this.body.distancia,
+                distancia: this.body.distancia.toFixed(1),
                 viento: Math.round(a.viento * 1.94384),
                 dir: direccion,
                 temp: a.temp,
