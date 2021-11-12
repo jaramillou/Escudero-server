@@ -217,7 +217,7 @@ app.get('/mapa_header/:sesion_id/:id', verificatoken, (req, res) => { //genera l
             hora: usuarioDB.hora[sesionID],
             hora_fin: usuarioDB.hora_fin[sesionID],
             distancia: usuarioDB.distancia[sesionID],
-
+            altitud: usuarioDB.altitud[sesionID],
             sesion: sesion,
             sesionID,
             id_propia, //no usada

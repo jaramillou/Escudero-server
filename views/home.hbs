@@ -9,7 +9,7 @@
   <h2>{{ usuario }} </h2>
   Nº de sesión: {{ sesionID }}
     {{> mapa_multistring }}
-    <input type="button" id = "botonBorrar"  value= "borrar" onclick="borrar({{ sesionID}})">
+   
     <!--<input type="button" id = "botonCerrar"  value= "cerrar" onclick=cerrar()>-->
 
 
@@ -43,7 +43,7 @@
 <p>Temperatura: {{ temp }} 
 ,clima: {{ clima }} </p>
 <div id="div2"></div>
-
+ <input type="button" id = "botonBorrar"  value= "borrar" onclick="borrar({{ sesionID}})">
 <!--
 <p>Tiempo en planeo: </p>
 <p>porcentaje de planeo: </p>
@@ -127,35 +127,83 @@
 
 
 
+
+
     function trasluchadas(direccion){
       var inicio = 5
       var tras_arriba = 0
       var tras_abajo = 0
       var velocidad = {{ velocidad }}
       var dir_viento = {{ dir }}
+      var altitud = {{ altitud }}
       if(dir_viento > 360) dir_viento = Math.abs(dir_viento - 360)
       console.log("viento = " + dir_viento)
+     
+      var offset =  180 - dir_viento; 
+        console.log("offset = " + offset)
+      dir_viento = 180 
 
-    for (var i=0; i<direccion.length; i++) {
-            console.log(direccion[i])
+      var dir_offset = new Array(); 
+      
+      for (var i=0; i < direccion.length; i++) {
+        var aux = parseInt(direccion[i]) + offset
+        if(aux > 360){
+            dir_offset.push(aux - 360 )
+        }
+        else{
+            dir_offset.push(aux)
+        }
+      }
+      var anterior
+      var count=0
+      var cambio;
+    /*  
+    for (var i=1; i<dir_offset.length; i++) {
+      anterior =  dir_offset[i-1]
+          console.log(dir_offset[i]+", "+  anterior  + ", vel: "+ velocidad[i]  )
+           
+           if(dir_offset[i] > anterior){
+             
+              count++;
+              if(Math.abs(direccion[i] - dir_viento) < 45 && count > 5){
+                  tras_arriba++
+                  console.log("trasluchada*****************************************************************arriba");
+                  i+=5
+              }
+           }
+           else {
+             count = 0;
+           }
+    } 
+    */   
 
-            if(Math.abs(direccion[i] - dir_viento) < 10 && i > 10 && i < direccion.length - 10)
+
+
+           // if(Math.abs(dir_offset - dir_viento) < 45){
+            //    console.log("trasluchada*****************************************************************arriba");
+           // }
+        for (var i=1; i<dir_offset.length; i++) {    
+            //console.log(dir_offset[i] + " vel: "+ velocidad[i - inicio] )
+
+            if(Math.abs(dir_offset[i] - dir_viento) < 45 && i > inicio && i < direccion.length - inicio)
             
-                if(direccion[i - inicio] - dir_viento > 45 && direccion[i - inicio - 2] - dir_viento > 45 && direccion[i + inicio] - dir_viento < 45 && velocidad[i - inicio] > 10 ){
+                if(dir_offset[i - inicio] - dir_viento > 45 && dir_offset[i - inicio - 2] - dir_viento > 45 && dir_offset[i + inicio] - dir_viento < -45 && velocidad[i - inicio] > 10 ){
                   console.log("trasluchada*****************************************************************arriba");
                   tras_arriba++;
+                  i=i+inicio;
                 }
 
-                if(direccion[i -inicio] - dir_viento < 45 && direccion[i -inicio - 2] - dir_viento < 45 && direccion[i + inicio] - dir_viento > 45 && velocidad[i - inicio] > 10 ){
+                if(dir_offset[i -inicio] - dir_viento < -45 && dir_offset[i -inicio - 2] - dir_viento < -45 && dir_offset[i + inicio] - dir_viento > 45 && velocidad[i - inicio] > 10 ){
                   console.log("trasluchada*****************************************************************abajo");
                   tras_abajo++;
+                  i=i+inicio;
                 }
-
-    }
+            
+        }
     console.log("trasluchadas arribaa*****************" + tras_arriba);
     console.log("trasluchadas abajoo*****************" + tras_abajo);
-    console.log("durante los segundos*****************" + direccion.length);
-}
+    console.log("durante los segundos*****************" + direccion.length  );
+
   
 /*
   function antes(direccion,cambio){
@@ -167,8 +215,10 @@
        45
 
     }
+
+    */
   }
-*/
+
 
 
 </script>
