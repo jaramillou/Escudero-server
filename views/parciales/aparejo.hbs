@@ -1,0 +1,118 @@
+
+<script>
+
+
+function desplegable_velas() {
+
+var array_velas = JSON.parse(document.getElementById("velas").textContent)
+var array_tablas = JSON.parse(document.getElementById("tablas").textContent)
+//var array_aletas = JSON.parse(document.getElementById("aletas").textContent)
+//array = JSON.parse(array) 
+
+//velas
+ var sel1 = document.createElement("select");
+ sel1.setAttribute("id", "sel1");
+//tablas
+ var sel2 = document.createElement("select");
+sel2.setAttribute("id", "sel2");
+
+ //aletas
+ //var sel3 = document.createElement("select");
+ //sel3.setAttribute("id", "sel3");
+ 
+array_velas.forEach( i => {
+  var option = document.createElement('option');
+  option.text= i
+  sel1.add(option,null)
+ });
+
+array_tablas.forEach( i => {
+  var option = document.createElement('option');
+  option.text= i
+  sel2.add(option,null)
+ });
+/*
+array_aletas.forEach( i => {
+  var option = document.createElement('option');
+  option.text= i
+  sel3.add(option,null)
+ });
+
+*/
+var vela_sel =  {{ aux_vela_selecionada }}   //quita las puñeteras comillas de inicio en mongo, mongo
+  var newDiv = document.createElement("div")
+  newDiv.innerHTML=` <input type="button"  value= "Guardar material" onclick= carga_vela()> `
+
+if(vela_sel != 1){
+  document.getElementById("div1").appendChild(sel1);
+  document.getElementById("div1").appendChild(sel2);
+  //document.getElementById("div2").appendChild(sel3);
+
+  document.getElementById("div1").appendChild(newDiv);
+}else{
+  document.getElementById("div2").appendChild(sel1);
+    document.getElementById("div2").appendChild(sel2);
+  //document.getElementById("div2").appendChild(sel3);
+
+  document.getElementById("div2").appendChild(newDiv);
+}
+
+ 
+}
+
+
+
+function carga_vela(){
+  var sesion_ID = {{ sesionID }}
+  var vela_selecionada = document.getElementById("sel1").value;
+  var tabla_selecionada = document.getElementById("sel2").value;
+  //var aleta_selecionada = document.getElementById("sel3").value;
+
+
+  
+       
+
+                            
+         var token1 = localStorage.getItem('token');
+         if (token1 != null) {           //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+        
+            let h = new Headers();
+            h.append('authorization', `${token1}`);
+            //let req = new Request(`/vela_sesion/${sesion_ID}/${vela_selecionada}/${tabla_selecionada}/${aleta_selecionada}`, {
+            let req = new Request(`/vela_sesion/${sesion_ID}/${vela_selecionada}/${tabla_selecionada}`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: h,
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                //body: JSON.stringify(id)
+            });
+          
+
+
+
+            fetch(req)
+                 .then(resp => resp.text())
+                 .then(data => {
+
+                    
+                        if(data.ok=true){
+
+                          console.log("*********************************añadida******************************")
+                          console.log("vela añadida: " + vela_selecionada)
+                          console.log("tabla añadida: " + tabla_selecionada)
+                
+                         //let url = '/muro';
+                         
+                        }
+                        else{
+                          console.log("no añadido ")
+                        }
+            }).then( data =>  {location.reload()} )
+          
+            
+        }
+        
+}
+
+</script>

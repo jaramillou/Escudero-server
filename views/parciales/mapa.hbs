@@ -1,0 +1,106 @@
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+<div id='map' style='width: 100%; height: 50%;'></div>
+
+<script>
+
+var geojson = {
+'type': 'geojson',
+    'data': {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'LineString',
+             'coordinates': {{ coordinates }}
+        }
+    }
+}
+
+
+
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A';
+
+
+
+var coordinates = geojson.data.geometry.coordinates
+var bounds = coordinates.reduce(function(bounds, coord) {
+            return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11',
+center: geojson.data.geometry.coordinates[0], // starting position [lng, lat]
+//center: bounds.center,
+zoom: 8 // starting zoom
+
+ //   zoom: bounds.zoom
+});
+map.on('load', function() {
+map.addSource('route',geojson);
+map.addLayer({
+'id': 'route',
+'type': 'line',
+'source': 'route',
+'layout': {
+'line-join': 'round',
+'line-cap': 'round'
+},
+'paint': {
+'line-color': 'RED',
+'line-width': 5
+}
+}); 
+var coordinates = geojson.data.geometry.coordinates
+
+        // Pass the first coordinates in the LineString to `lngLatBounds` &
+        // wrap each coordinate pair in `extend` to include them in the bounds
+        // result. A variation of this technique could be applied to zooming
+        // to the bounds of multiple Points or Polygon geomteries - it just
+        // requires wrapping all the coordinates with the extend method.
+        
+       // var bounds = coordinates.reduce(function(bounds, coord) {
+       //     return bounds.extend(coord);
+      //  }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+
+        map.fitBounds(bounds, {
+            padding: 150, animate: true, duration: 3000
+    
+        });
+        
+});
+
+</script>
+
+<p>hora inicio: {{ hora }}</p>
+<p>tiempo navegado: {{ sesion }} </p>
+<p>velocidad máxima: {{ velMax}} </p>
+<br>
+<p>Spot: {{ spot}} </p>
+<p>Nudos: {{ viento}}  <svg data-v-47880d39="" width="30" height="30" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate({{ dir }}deg);">
+        <g data-v-47880d39="" fill="#48484a">
+            <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
+            </path>
+ </p>           
+
+            </path></g></svg>
+<p>Temperatura: {{ temp }} </p>
+<p>clima: {{ clima }} </p>
+
+
+
+ 
+<!--
+<p>Tiempo en planeo: </p>
+<p>porcentaje de planeo: </p>
+<p>comentarios: </p><br>
+
+<p>Usuario que han navegado en este spot hoy</p>
+
+-->
+
+

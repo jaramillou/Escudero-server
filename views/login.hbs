@@ -1,0 +1,137 @@
+
+<html>
+<title></title>
+
+
+
+{{> head }}
+ <link rel="stylesheet" href="assets/css/validacion.css">  
+
+<script>
+
+
+
+</script>
+</head>
+<body>
+
+  <script> 
+  
+      
+       //if (localStorage.getItem('token', json.token) != null){
+        //abrirUrlHeader('muro/');
+</script>
+<form id ='formulario'action="/login" method="post">
+    <ul>
+        
+        <li>
+            <label for="mail">Correo electrónico:</label >
+            <input type="email" id="email" name="email" required>
+        </li>
+        <li>
+            <label for="msg">Contraseña:</label>
+            <input type="password" id="passw" name="password" required>
+        </li>
+    </ul>
+    <button type="button" onclick="myFunction()" id='botonOn'>Entrar</button>
+</form>
+<div id="div1">Introduce tu usuario y contraseña</div>
+<a href="/nuevoUsuario">Nuevo usuario</a>
+<script>
+
+
+async function myFunction(){
+
+
+    
+   // location.reload()
+    const formu = document.getElementById('formulario');
+    console.log(formu.email.value)
+    usuarioEnvio=formu.email.value;  
+    
+    let datos = {
+        "email" : formu.email.value,
+        "password":  formu.password.value
+    }
+    
+    let token = await postData('/login', datos)
+    console.log(token)
+    if(token == null){ 
+        //alert("usuairo Malo")
+         var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", "divAux");
+
+            newDiv.innerHTML='<p style="color:#FF0000";>introduce correctametne tu usuario y contrseña contraseña</p>'
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div1").appendChild(newDiv);
+    }
+
+    
+    // Headers.apply
+    
+   // localStorage.setItem('token', res.token);
+    //let url = '/muro';
+    //abrirUrlHeader(url)
+
+  
+}
+
+
+
+
+
+var token2= localStorage.getItem('token');
+
+if(token2!=null)  {
+    window.onload = bypass('/muro');
+}
+
+
+
+
+
+async function postData(url = '', data = {}) {    
+    
+    var token = null                  //pasar a head
+  // Opciones por defecto estan marcadas con un *
+  const response = await fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data)
+     // body data type must match "Content-Type" header
+  }).then(response => response.json())
+    .then(json => {
+        token=json.token
+        if(token!=null){
+            
+            localStorage.setItem('token', json.token);
+             location.reload();
+            let url = '/muro';
+            abrirUrlHeader(url)
+            
+            
+        }else return null
+     
+        
+        })
+    .catch(err => {return console.log(err)});
+    return token;
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+

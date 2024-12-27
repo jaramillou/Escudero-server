@@ -1,0 +1,422 @@
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+<div id='map' style='width: 100%; height: 50%;'></div>
+
+<style>
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 60%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 28px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+
+
+    .overlay {
+        position: absolute;
+        top: 160px;
+        left: 10px;
+    }
+
+    .overlay button {
+        font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #3386c0;
+        color: #fff;
+        display: inline-block;
+        margin: 0;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .overlay button:hover {
+        background-color: #4ea0da;
+    }
+
+</style>
+
+
+
+
+
+<script>
+
+var geojson = {
+'type': 'geojson',
+    'data': {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'LineString',
+             'coordinates': {{ coordinates }}
+        }
+    }
+}
+
+
+
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A';
+
+
+var coords = {{ coordinates }}
+//var velas = {{ velas }}
+//var coordinates = geojson.data.geometry.coordinates
+var bounds = coords.reduce(function(bounds, coord) {
+            return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coords[0], coords[0]));
+
+
+var map = new mapboxgl.Map({
+container: 'map',
+bearing: 150,
+pitch: 76,
+style: 'mapbox://styles/mapbox/satellite-streets-v11',
+center: coords[0], // starting position [lng, lat]
+//center: bounds.center,
+zoom: 5 // starting zoom
+
+ //   zoom: bounds.zoom
+});
+
+
+
+
+
+const vel = {{ velocidad }}
+const dir =  {{ direccion }}
+
+//let num_trasluchadas = trasluchadas(direccion)
+map.on('load', function () {
+var fc = {"type": "FeatureCollection", "features": []}
+var size = 2;
+
+for (var i=0; i<coords.length; i+=size-1) {
+    var smallarray = coords.slice(i,i+size);
+    var velAux = parseInt(vel[i],10)
+		// Split the original linestring into chunks.
+    // Each chunk goes in a specific feature.
+    fc.features.push({
+                "type": "Feature",
+                // Fake elevation information.
+                "properties": {"ele": velAux},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": smallarray
+                }
+            })
+          
+}
+ 
+map.loadImage(
+    '/assets/img/start.png',
+    function (error, image) {
+        if (error) throw error;
+        map.addImage('cat', image);
+        map.addSource('point', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                 'features': [
+                {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': coords[0]
+                }
+                }
+                ]
+            }
+        });
+        
+        map.addLayer({
+        'id': 'points',
+        'type': 'symbol',
+        'source': 'point',
+        'layout': {
+        'icon-image': 'cat',
+        'icon-size': 0.02
+        }
+        });
+    }
+);
+
+map.loadImage(
+    '/assets/img/end.jpg',
+    function (error, image) {
+        if (error) throw error;
+        map.addImage('cat2', image);
+        map.addSource('point2', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                 'features': [
+                {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': coords[coords.length-1]
+                }
+                }
+                ]
+            }
+        });
+        
+        map.addLayer({
+        'id': 'points2',
+        'type': 'symbol',
+        'source': 'point2',
+        'layout': {
+        'icon-image': 'cat2',
+        'icon-size': 0.02
+        }
+        });
+    }
+);
+
+
+map.addLayer({
+        "id": "route",
+        "type": "line",
+        "source": {
+            "type": "geojson",
+            "data": fc
+        },
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+        	  // Data driven line color at works. 
+            "line-color":  {
+            "property": "ele",
+            "type": "exponential",
+            "stops": [
+                [-3, "#FFFF00"],
+                [20, "#FF0000"],
+                [30, "#0000FF"]
+        ]},
+            "line-width": 8
+        }
+    });
+const popup = new mapboxgl.Popup({ closeButton: false });
+const marker = new mapboxgl.Marker({
+            "id": 'marker',
+            "color": 'red',
+            "scale": 0.8,
+            "draggable": false,
+            "pitchAlignment": 'auto',
+            "rotationAlignment" : 'auto'
+        })
+            .setLngLat(coords[50])
+            .setPopup(popup)
+            .addTo(map)
+            .togglePopup();
+
+
+
+        // Pass the first coordinates in the LineString to `lngLatBounds` &
+        // wrap each coordinate pair in `extend` to include them in the bounds
+        // result. A variation of this technique could be applied to zooming
+        // to the bounds of multiple Points or Polygon geomteries - it just
+        // requires wrapping all the coordinates with the extend method.
+        
+       // var bounds = coordinates.reduce(function(bounds, coord) {
+       //     return bounds.extend(coord);
+      //  }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+
+        map.fitBounds(bounds, {
+            padding: 10, animate: true, duration: 3000
+    
+        });
+/*
+        var marker1 = new mapboxgl.Marker()
+        .setLngLat(coords[0])
+        .addTo(map);
+     */   
+});
+
+//Codigo a Ejecutar al Cargar la Pagina
+function myOnLoad() {
+ cargar_velas()
+
+}
+
+// funcion para Cargar Provincias al campo <select>
+function cargar_velas() {
+ var array = ["Cantabria", "Asturias", "Galicia", "Andalucia", "Extremadura"];
+
+ // Ordena el Array Alfabeticamente, es muy facil ;)):
+ array.sort();
+
+ addOptions("velas", array);
+}
+
+// Rutina para agregar opciones a un <select>
+function addOptions(domElement, array) {
+ var select = document.getElementsByName(domElement)[0];
+
+ for (value in array) {
+  var option = document.createElement("option");
+  option.text = array[value];
+  select.add(option);
+ }
+}
+
+
+
+
+
+</script>
+
+<div class="slidecontainer">
+  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  <p>Value: <span id="demo"></span></p>
+</div>
+
+   <a class="next" onclick="plusSlides(1)">&#10095;</a>   
+   <a class="prev" onclick="plusSlides(-1)">&#10094;</a>  
+
+<div id="map"></div>
+<div class="overlay">
+    <button id="replay">Replay</button>
+</div>
+
+<script>
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+slider.setAttribute("max", coords.length);
+output.innerHTML = slider.value;
+
+let marker1 = new mapboxgl.Marker()
+const popup = new mapboxgl.Popup({ closeButton: false });
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+   //marker.setLngLat(coords[slider.value]).addTo(map);
+    //animateMarker(slider.value)
+  popup.setHTML('Dir: ' + dir[slider.value] + 'm<br/>' + 'Knots: ' + vel[slider.value] + 'm<br/>');  
+marker1.setLngLat(coords[slider.value]).setPopup(popup)
+.addTo(map) .togglePopup();;
+
+
+
+}
+
+
+function plusSlides(offset){
+    var slider = document.getElementById("myRange");
+    slider.value = slider.value*1 + offset
+    output.innerHTML = slider.value;
+    popup.setHTML('Dir: ' + dir[slider.value] + 'm<br/>' + 'Knots: ' + vel[slider.value] + 'm<br/>');  
+marker1.setLngLat(coords[slider.value]).setPopup(popup)
+.addTo(map) .togglePopup();;
+
+
+}
+
+
+   function animate() {
+       //console.log("_____________________________valoe: _________________________________________________" + pause)
+       if(pause) {
+           
+           return 
+        }
+       let boton = document.getElementById('replay');
+       
+       output.innerHTML = counter
+    slider.value = counter
+            const start =
+                coords[
+                    counter >= steps ? counter - 1 : counter
+                ];
+            const end =
+                coords[
+                    counter >= steps ? counter : counter + 1
+                ];
+            if (!start || !end) return;
+
+            // Update point geometry to a new position based on counter denoting
+            // the index to access the arc
+            popup.setHTML('Dir: ' + dir[counter] + 'm<br/>' + 'Knots: ' + vel[counter] + 'm<br/>');  
+            marker1.setLngLat(coords[counter]).setPopup(popup)
+            .addTo(map) .togglePopup();;
+
+
+            
+
+            // Update the source with this new data
+         
+
+            // Request the next frame of animation as long as the end has not been reached
+            if (counter < steps) {
+                requestAnimationFrame(animate);
+            }
+
+            counter = counter + 1;
+        }
+
+
+const steps = coords.length;
+    let counter = 0;
+    let pause = false;
+let boton = document.getElementById('replay');
+boton.addEventListener('click', () => {
+
+    if(!pause){ 
+        console.log("_____________________________Replay_________________________________________________")
+    
+    pause = true;
+    animate();
+    boton.innerHTML = "Pause";
+    }
+    else{
+        console.log("_____________________________PAuSE_________________________________________________")
+        pause = false;
+        boton.innerHTML = "Replay";
+        animate()
+    }
+         
+});
+
+
+</script>
+
+
+
+

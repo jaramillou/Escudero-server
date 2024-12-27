@@ -1,0 +1,78 @@
+
+{{> head }}
+
+ <body onload="mostrarRutas({{ muro }})">
+
+    {{> navslink letrero='Muro'}}
+
+
+<div class="text-center" id="div1" ><h2 id="otros" >{{ usuario }}</h2></div>
+
+
+<script>
+
+
+
+
+  function mostrarRutas(aux){
+    //console.log(aux)
+    
+     var sesion = 0
+        aux.cordenadas.forEach(function(element) {
+
+            var cord = JSON.parse(element)
+             var simplified = simplify(cord, 0.0001, false) 
+
+            var direccion = aux.dir[sesion]
+
+            var newDiv = document.createElement("div")
+
+            newDiv.innerHTML= `<div><br>usuario: ${aux.nombre}<br>${aux.hora[sesion]}  </div>  
+           
+            
+            <div>
+            <a href="/sesion/${sesion}/${aux._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A${JSON.stringify(simplified)}%7D)/auto/600x400?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A" class="img-fluid"/>
+            </a></div>
+            <div>
+            Spot: ${aux.spot[sesion]}, knots:${aux.viento[sesion]}, direccion${direccion}
+
+            <svg data-v-47880d39="" width="20" height="20" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate(${direccion }deg);"> 
+            <g data-v-47880d39="" fill="#48484a">
+            <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
+            </path></div>
+            <br>`
+            document.getElementById("div1").appendChild(newDiv);
+            sesion++
+
+
+
+        });
+
+}
+
+
+</script>
+  <script src="/assets/js/simplifica.js"></script>
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+   <script src="/assets/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+   
+    
+    
+  
+
+
+   
+
+
+
+
+
+
+
+</script>
+</body>

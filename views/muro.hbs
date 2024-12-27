@@ -1,0 +1,196 @@
+
+{{> head }}
+
+ <body onload="mostrarMuro({{ muro }})">
+
+    {{> navslink letrero='ESCUDERO'}}
+
+
+<div class="text-center" id="div1" ><h2 id="otros" >{{ usuario }}</h2></div>
+
+{{> cokies }}
+<script>
+
+
+
+
+  function mostrarMuro(aux){
+    //console.log(aux)
+      var n = [] //nos servirá como puntero o iterador de cada usuario amigo
+      var horas = [] //para anotar la hora de cada iterador 
+      var total = 0 //anotaremos el total de sesiones propias y de los amigos
+
+      for (var i = 0; i < aux.length; i++) {
+        if (aux[i]) {
+          n[i] = aux[i].hora.length - 1 //llevará la cuenta de los que ya se han puesto en cada vector
+          total += aux[i].hora.length //número total de sesiones de los amiguetes
+          //console.log("sesiones de cada usuariuo== " + aux[i].nombre + " : " + n[i])
+            }
+        }
+     for (var j = total - 1; j > -1; j--) { ///todos los campos de los amigos
+        for (var i = 0; i < aux.length; i++) { //cogemos cada amigo
+          if (n[i] > -1) {
+            horas[i] = aux[i].hora[n[i]] //juntamos las horas que quedan
+                        // console.log("horas en usuario== " + usuarioDB[i].nombre + " : " + horas[i])
+          } else horas[i] = null
+        }
+            
+            var m = menor(horas)
+            var direccion=0
+            direccion= aux[m].dir[n[m]]
+         // var sail= JSON.stringify([m].vela_usada[n[m]]).split("~");
+          var sail= aux[m].vela_usada[n[m]].replace(/['"]+/g, '').split("~");
+          var board= aux[m].tabla_usada[n[m]].replace(/['"]+/g, '').split("~");
+          // console.log("vela = " + sail)
+           
+
+           var vela="-";
+             if(sail != "-"){
+               vela = sail[1]
+               console.log("vela = " + vela)
+             }else{ 
+               vela = "-"
+              console.log("vela = " + vela)
+             
+             }
+
+             var tabla="-";
+             if(board != "-"){
+               tabla = board[1]
+               console.log("vela = " + tabla)
+             }else{ 
+               tabla = "-"
+              console.log("vela = " + tabla)
+             
+             }
+            
+           
+           
+           // console.log("vela = " + vela)
+          
+            var cord = JSON.parse(aux[m].cordenadas[n[m]])
+              
+          
+            var simplified = simplifica(cord) //simplifico los datos con el algoritmo Douglas-Peucker para que "quepan" en la URL (~8K) 
+                //la variable tolerancia 0.0001 debería ser proporcianal al tamaño en la clase Cordenada 
+          
+                                                                                                                                              //
+            var newDiv = document.createElement("div")
+          
+            
+            newDiv.setAttribute("id", aux[m].nombre);
+            var anchoLinea='3'
+            var colorLinea='ff0000'
+            var colorLinea_2='0000ff'
+
+
+//https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0   para cambiar la caracteristicas de la imagen mapbox static imagen tipo linestring es igual a point. cambiar a URL code con https://meyerweb.com/eric/tools/dencoder/ a mano
+// geojson({"type":"Feature","properties":{"stroke":"#ff00ff", "stroke-width": 6},"geometry":{"type":"LineString","coordinates":
+            newDiv.innerHTML=
+            `<div class="container">
+                <div class="d-flex flex-row ">
+                   <div class="p-2 mt-auto"><a href="javascript:abrirUrlHeader('/soloUsuario/${aux[m]._id}')"><img src='/assets/img/user.png' width="40" height="40" alt="user image" /></div>
+                   <div class="d-flex flex-column justify-content-end">
+                      <div class="p-0 mr-auto">${aux[m].nombre}</a></div>
+                      <div class="p-1 mr-auto">Spot:${aux[m].spot[n[m]]} </div>
+                   </div>
+                     
+                 
+                   <div class= "ml-auto mt-auto p-2"> knots:${aux[m].viento[n[m]]}
+                     <svg data-v-47880d39="" width="20" height="20" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate(${direccion }deg);"> 
+                            <g data-v-47880d39="" fill="#48484a">
+                            <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
+                            </path>
+                   </div>
+               
+                </div> 
+                
+              
+
+            
+              <div class="row">         
+                <div class="col-md-12"><a href="/sesion/${n[m]}/${aux[m]._id}"><img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(%7B%22type%22%3A%22Feature%22%2C%22properties%22%3A%7B%22stroke%22%3A%22%23${colorLinea}%22%2C%20%22stroke-width%22%3A%20${anchoLinea}%7D%2C%22geometry%22%3A%7B%22type%22%3A%22LineString%22%2C%22coordinates%22%3A%0A%0A%0A%0A%0A${JSON.stringify(simplified)}%7D%7D)/auto/1200x800?access_token=pk.eyJ1IjoiamphcmEiLCJhIjoiY2tkOGpkcDVzMGRuejJyb2RsYmUxcDZubCJ9.7-rob0zcnIsBcmy4SGL-_A" class="img-fluid"/></a></div>
+              </div>
+              <div class="row justify-content-start">
+               
+                  <div class="col-md-4"><p class="text-sm-left"> ${aux[m].hora[n[m]]},</p></div>
+                  
+               
+                  <div class="col-md-2"><a href="javascript:abrirUrlHeader('/velaUsuario/${n[m]}')">${vela}</a> <a href="javascript:abrirUrlHeader('/velaUsuario/${n[m]}')">${tabla}</a> </div>
+
+              
+              </div>
+           </div>
+            <br>`
+            document.getElementById("div1").appendChild(newDiv);
+            n[m]--
+
+      }
+
+}
+
+
+  function simplifica(coord) {
+        if (coord.length > 200 && coord.length < 999) {
+            var simplified = simplify(coord, 0.00001, false)
+            return simplified
+        } else if (coord.length > 1000 && coord.length < 1999) {
+            var simplified = simplify(coord, 0.00004, false)
+            return simplified
+        
+         } else if (coord.length > 2000 && coord.length < 3999) {
+            var simplified = simplify(coord, 0.0004, false)
+            return simplified
+        }
+        else if (coord.length > 4000) {
+            var simplified = simplify(coord, 0.0001, false)
+            return simplified
+        }
+        return coord
+    }
+
+
+function menor(params) {
+    var aux = params[0]
+    var pos = 0
+    for (var i = 0; i < params.length; i++) {
+
+        if (aux < params[i] || aux == null) {
+            // console.log(aux + " > " + params[i] + "cambia pos...")
+            aux = params[i]
+            pos = i
+
+        } else {
+            // console.log(aux + " < " + params[i])
+
+
+        }
+
+    }
+    return pos
+}
+</script>
+  <script src="/assets/js/simplifica.js"></script>
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+   <script src="/assets/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+   
+    
+    
+  
+
+
+   
+
+
+
+
+
+
+
+</script>
+</body>

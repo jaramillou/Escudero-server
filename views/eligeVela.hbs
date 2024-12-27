@@ -1,0 +1,271 @@
+{{> head }}
+{{> navslink}}
+
+<body onLoad="mostrar_material()">
+<br><br>
+<!-- <form action="/nuevaVela/{{ sesion }}/{{ id }}" method="post"> -->
+<form>
+   
+            <label for="name">Añade vela : </label>
+            <input type="text" id="name_vela" name="nombre_vela" >
+            <select name ="size_sail"  id="sel_vela"> 
+                <option value="" selected> elige vela</option>
+                <option value="2.8">3.7</option>
+                <option value="3.3">3.7</option>  
+                <option value="3.7">3.7</option> 
+                <option value="4.0">4.0</option> 
+                <option value="4.2">4.2</option> 
+                <option value="4.5">4.5</option> 
+                <option value="4.7">4.7</option> 
+                <option value="5.3">5.3</option> 
+                <option value="5.3">5.3</option>
+                <option value="5.7">5.7</option>
+                <option value="5.8">5.8</option> 
+                <option value="6.2">6.2</option> 
+                <option value="7.0">7.0</option> 
+                <option value="8.0">8.0</option> 
+            </select> 
+            <input type="button"  value= "Guardar material" onclick= "sumar_vela();"> 
+<br>
+           <label for="name">Añade tabla:</label>
+            <input type="text" id="name_tabla" name="nombre_tabla">
+            <select name ="size_board" id="sel_tabla"> 
+              <option value="" selected> elige tabla</option>
+                <option value="73">73</option>
+                <option value="85">85</option>  
+                <option value="94">94</option> 
+                <option value="103">103</option> 
+                <option value="107">107</option> 
+                <option value="126">126</option> 
+                <option value="136">136</option> 
+                <option value="141">141</option> 
+                <option value="160">160</option>
+                <option value="170">170</option>
+                <option value="180">180</option> 
+             
+            </select> 
+      
+        <input type="button"  value= "Guardar material" onclick= sumar_tabla()> 
+    
+</form>
+
+<p id ="velas" hidden >{{ velas }}</p>
+<p id ="tablas" hidden>{{ tablas }}</p>
+<div id='div_velas'></div>
+<br>
+<div id='div_tablas'></div>
+
+<script>
+
+  function mostrar_material(){
+    mostrar_velas();
+    mostrar_tablas();
+  }
+
+function mostrar_velas() {
+    var array_velas = JSON.parse(document.getElementById("velas").textContent)
+   
+
+    var div_velas = document.getElementById("div_velas")
+    array_velas.forEach( i => {
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", "div" + i);//ya llamaremos a cada boton por el -ID
+             console.log("*********************************barra vela??******************************" + i )
+            console.log("*********************************añadiendo vela******************************" + i)
+            newDiv.innerHTML=`"${i}" <input type="button" id = "${i}"  value= "borrar" onclick="borraVela('${i}');"> `
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div_velas").appendChild(newDiv);
+            i++;
+    });
+
+}
+
+
+function mostrar_tablas() {
+    
+     var array_tablas = JSON.parse(document.getElementById("tablas").textContent)
+
+    var div_tablas = document.getElementById("div_tablas")
+    array_tablas.forEach( i => {
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", "div" + i);//ya llamaremos a cada boton por el -ID
+   
+            newDiv.innerHTML=`"${i}" <input type="button" id = "${i}"  value= "borrar" onclick="borraTabla('${i}');"> `
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div_tablas").appendChild(newDiv);
+            i++;
+    });
+
+}
+</script>
+
+
+<br>
+
+
+
+<script>
+
+
+function sumar_vela(){
+
+  var sesion_ID = {{ sesion }}
+  if (document.getElementById("name_vela").value!= ""  &&  document.getElementById("sel_vela").value != ""){
+    console.log("*********************************añadiendo vela******************************")
+  var vela_selecionada = document.getElementById("name_vela").value + "~" + document.getElementById("sel_vela").value;
+  //var tabla_selecionada = document.getElementById("name_tabla").value + "~" + document.getElementById("sel_tabla").value;
+       
+                      
+         var token1 = localStorage.getItem('token');
+         if (token1 != null) {           //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+        
+            let h = new Headers();
+            h.append('authorization', `${token1}`);
+            let req = new Request(`/nuevaVela/{{ sesion }}/${vela_selecionada}`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: h,
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                //body: JSON.stringify(id)
+            });
+          
+
+            fetch(req)
+                 .then(resp => resp.text())
+                 .then(data => {
+
+                    
+                        if(data.ok=true){
+                          console.log("vela añadida: " + vela_selecionada)
+                        }
+                        else{
+                          console.log("no añadido ")
+                        }
+            }).then( data =>  {
+               
+                var newDiv = document.createElement("div")
+                newDiv.setAttribute("id", "div" + vela_selecionada);//ya llamaremos a cada boton por el -ID
+                newDiv.innerHTML=`"${vela_selecionada}" <input type="button" id = "${vela_selecionada}"  value= "borrar" onclick="borraVela('${vela_selecionada}');"> `  
+                document.getElementById("div_velas").appendChild(newDiv);
+
+            } )
+          
+            
+        }
+      
+  }
+}
+
+
+
+function sumar_tabla(){
+  var sesion_ID = {{ sesion }}
+  if (document.getElementById("name_tabla").value!= ""  &&  document.getElementById("sel_tabla").value != ""){
+    console.log("*********************************añadiendo tabla******************************")
+  var tabla_selecionada = document.getElementById("name_tabla").value + "~" + document.getElementById("sel_tabla").value;
+                     
+         var token1 = localStorage.getItem('token');
+         if (token1 != null) {           //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+        
+            let h = new Headers();
+            h.append('authorization', `${token1}`);
+            let req = new Request(`/nuevaTabla/{{ sesion }}/${tabla_selecionada}`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: h,
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                //body: JSON.stringify(id)
+            });
+          
+
+            fetch(req)
+                 .then(resp => resp.text())
+                 .then(data => {
+
+                    
+                        if(data.ok=true){
+                          console.log("tabla añadida: " + tabla_selecionada)
+                        }
+                        else{
+                          console.log("no añadido ")
+                        }
+            }).then( data =>  {
+
+              var newDiv = document.createElement("div")
+                newDiv.setAttribute("id", "div" + tabla_selecionada);//ya llamaremos a cada boton por el -ID
+                newDiv.innerHTML=`"${tabla_selecionada}" <input type="button" id = "${tabla_selecionada}"  value= "borrar" onclick="borraVela('${tabla_selecionada}');"> `  
+                document.getElementById("div_tablas").appendChild(newDiv);
+            } )
+          
+            
+        }
+      
+  }
+}
+
+function borraVela(nombreVela){
+
+
+  var token1 = localStorage.getItem('token');
+  if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+        let h = new Headers();
+        h.append('authorization', `${token1}`);
+        let req = new Request(`/borrarVela/${nombreVela}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: h,
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            //body: JSON.stringify(id)
+        });
+
+       fetch(req)
+            .then(resp => resp.text())
+            .then(data => {
+              
+              if(data.ok=true){
+
+                document.getElementById("div" + `${nombreVela}`).innerHTML=""//el nombre es el id que hay que borrar
+
+              }
+            });
+  }
+  
+}
+
+function borraTabla(nombreTabla){
+
+
+  var token1 = localStorage.getItem('token');
+  if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+        let h = new Headers();
+        h.append('authorization', `${token1}`);
+        let req = new Request(`/borrarTabla/${nombreTabla}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: h,
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            //body: JSON.stringify(id)
+        });
+
+       fetch(req)
+            .then(resp => resp.text())
+            .then(data => {
+              
+              if(data.ok=true){
+
+                document.getElementById("div" + `${nombreTabla}`).innerHTML=""//el nombre es el id que hay que borrar
+
+              }
+            });
+  }
+  
+}
+</script>

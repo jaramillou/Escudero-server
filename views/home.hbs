@@ -1,0 +1,237 @@
+{{> head }}
+{{> aparejo }}
+
+
+<!-- <body onLoad="desplegable_velas()">   -->
+  <body onLoad="iniciador()">
+  {{> navslink }}
+   
+  <h2>{{ usuario }} </h2>
+  Nº de sesión: {{ sesionID }}
+    {{> mapa_multistring }}
+   
+    <!--<input type="button" id = "botonCerrar"  value= "cerrar" onclick=cerrar()>-->
+
+
+
+    
+
+ 
+
+<div id="div1"></div>
+<p id ="velas" hidden >{{ velas }}</p>
+<p id ="tablas" hidden>{{ tablas }}</p>
+<p id ="propia" hidden >{{ propia }}</p>
+<p hidden id ="aletas">{{ aletas }}</p>
+<p>vela seleccionada: {{ vela_usada }}</p>
+<p>tabla seleccionada: {{ tabla_usada }}</p>
+<p>aleta seleccionada: {{ aleta_usada }}</p>
+<p>hora inicio: {{ hora }}</p>
+<p>tiempo navegado: {{ sesion }} </p>
+<p>distancia: {{ distancia }} </p>
+<p>velocidad máxima: {{ velMax}} </p>
+<br>
+<p>Spot: {{ spot}} </p>
+<p>Nudos: {{ viento}} 
+<svg data-v-47880d39="" width="30" height="30" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" class="icon-wind-direction" style="transform: rotate({{ dir }}deg);">
+        <g data-v-47880d39="" fill="#48484a">
+            <path data-v-47880d39="" d="M510.5,749.6c-14.9-9.9-38.1-9.9-53.1,1.7l-262,207.3c-14.9,11.6-21.6,6.6-14.9-11.6L474,48.1c5-16.6,14.9-18.2,21.6,0l325,898.7c6.6,16.6-1.7,23.2-14.9,11.6L510.5,749.6z">
+            </path>
+            
+</g></svg></p>
+            </path></g></svg>
+<p>Temperatura: {{ temp }} 
+,clima: {{ clima }} </p>
+<div id="div2"></div>
+ <input type="button" id = "botonBorrar"  value= "borrar" onclick="borrar({{ sesionID}})">
+<!--
+<p>Tiempo en planeo: </p>
+<p>porcentaje de planeo: </p>
+<p>comentarios: </p><br>
+
+<p>Usuario que han navegado en este spot hoy</p>
+
+-->
+<script>
+
+
+  function iniciador(){
+          var direccion = {{ direccion }}
+         var num_trasluchadas = trasluchadas(direccion)
+        var propia =  {{ propia }}
+        //let propia = document.getElementById("propia");
+        console.log("iniciadora: " + propia)
+        if(propia == 1){
+          desplegable_velas()
+          console.log("sesión propia")
+        }
+        else{
+          var boton = document.getElementById("botonBorrar");
+          boton.onclick=""
+          console.log("sesión ajena")
+        }
+
+
+  }
+  
+ 
+
+    function borrar(sesionID){
+
+        console.log("*********************************borrando******************************") 
+
+                            
+         var token1 = localStorage.getItem('token');
+    
+         //console.log("id: " + id  + ", token.id: " + token1)
+         if (token1 != null) {           //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+            //console.log("*********************************siiii borrando******************************")
+            let h = new Headers();
+            h.append('authorization', `${token1}`);
+            let req = new Request(`/borrar/${sesionID}`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: h,
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                //body: JSON.stringify(id)
+            });
+          
+
+
+
+            fetch(req)
+                 .then(resp => resp.text())
+                 .then(data => {
+
+                      console.log("*********************************borrando******************************")
+                        if(data.ok=true){
+
+                          console.log("*********************************borrado******************************")
+                          console.log("cordenadas  borrando elemento: " + sesionID)
+                
+                         //let url = '/muro';
+                         
+                        }
+                        else{
+                          console.log("no borrado ")
+                        }
+            }).then( data =>  {muro()} )
+          
+            
+        }
+
+
+    }
+
+
+
+
+
+
+    function trasluchadas(direccion){
+      var inicio = 5
+      var tras_arriba = 0
+      var tras_abajo = 0
+      var velocidad = {{ velocidad }}
+      var dir_viento = {{ dir }}
+      var altitud = {{ altitud }}
+      if(dir_viento > 360) dir_viento = Math.abs(dir_viento - 360)
+      console.log("viento = " + dir_viento)
+     
+      var offset =  180 - dir_viento; 
+        console.log("offset = " + offset)
+      dir_viento = 180 
+
+      var dir_offset = new Array(); 
+      
+      for (var i=0; i < direccion.length; i++) {
+        var aux = parseInt(direccion[i]) + offset
+        if(aux > 360){
+            dir_offset.push(aux - 360 )
+        }
+        else{
+            dir_offset.push(aux)
+        }
+      }
+      var anterior
+      var count=0
+      var cambio;
+    /*  
+    for (var i=1; i<dir_offset.length; i++) {
+      anterior =  dir_offset[i-1]
+          console.log(dir_offset[i]+", "+  anterior  + ", vel: "+ velocidad[i]  )
+           
+           if(dir_offset[i] > anterior){
+             
+              count++;
+              if(Math.abs(direccion[i] - dir_viento) < 45 && count > 5){
+                  tras_arriba++
+                  console.log("trasluchada*****************************************************************arriba");
+                  i+=5
+              }
+           }
+           else {
+             count = 0;
+           }
+    } 
+    */   
+
+
+
+           // if(Math.abs(dir_offset - dir_viento) < 45){
+            //    console.log("trasluchada*****************************************************************arriba");
+           // }
+        for (var i=1; i<dir_offset.length; i++) {    
+            //console.log(dir_offset[i] + " vel: "+ velocidad[i - inicio] )
+
+            if(Math.abs(dir_offset[i] - dir_viento) < 45 && i > inicio && i < direccion.length - inicio)
+            
+                if(dir_offset[i - inicio] - dir_viento > 45 && dir_offset[i - inicio - 2] - dir_viento > 45 && dir_offset[i + inicio] - dir_viento < -45 && velocidad[i - inicio] > 10 ){
+                  console.log("trasluchada*****************************************************************arriba");
+                  tras_arriba++;
+                  i=i+inicio;
+                }
+
+                if(dir_offset[i -inicio] - dir_viento < -45 && dir_offset[i -inicio - 2] - dir_viento < -45 && dir_offset[i + inicio] - dir_viento > 45 && velocidad[i - inicio] > 10 ){
+                  console.log("trasluchada*****************************************************************abajo");
+                  tras_abajo++;
+                  i=i+inicio;
+                }
+            
+        }
+    console.log("trasluchadas arribaa*****************" + tras_arriba);
+    console.log("trasluchadas abajoo*****************" + tras_abajo);
+    console.log("durante los segundos*****************" + direccion.length  );
+
+  
+/*
+  function antes(direccion,cambio){
+    var inicio = 5
+    for(var i = cambio; i > cambio - inicio && i <= 0; i--){
+      direccion[i - inicio] - dir_viento >
+      
+      
+       45
+
+    }
+
+    */
+  }
+
+
+
+</script>
+
+    
+    
+
+
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+   <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script> -->
+   <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+  <!--  <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' /> -->
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+<html>
+{{> head }}
+<body onload="mostrarAmigos({{ amigos_id }})">
+
+  {{> navslink}}
+
+ <br><br>
+<form id ='formulario'action="/buscarAmigos" method="POST">
+    
+            <label for="busca">Busca a tus amigos:</label >
+            <input type="search" id="buscar" name="busca">
+  <button type="button" onclick="busqueda()" id='botonOn'>Buscar</button>
+            </form>
+      
+   
+    
+</form>
+
+<div id="div0"><h2>amigos actuales : </h2><h2 id="seguidos" style="visibility: hidden" >{{ amigos }}</h2>  </div>
+<div id="div2"><h2 id="otros" ></h2></div>
+<div id="div1"></div>
+
+
+
+
+<script>
+
+
+
+//window.onload = mostrarAmigos();
+
+function mostrarAmigos(ami){
+  var amigos = document.getElementById('seguidos').innerHTML;
+  var res = amigos.split(",");
+  var i=0;
+  //var otros = document.getElementById('otros');
+  //otros.innerHTML=amigos.nodeValue
+  ami.forEach( element => {
+    console.log(element.nombre) 
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", "div" + element);//ya llamaremos a cada boton por el -ID
+
+            newDiv.innerHTML=`<h1>${res[i]}</h1> <input type="button" id = "${res[i]}"  value= "No seguir" onclick=noSeguir("${element}","${res[i]}")> `
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div1").appendChild(newDiv);
+            i++;
+            
+
+    //alert(element)
+  });
+}
+
+
+
+
+async function busqueda(){
+
+
+   var amigos = document.getElementById('seguidos').innerHTML;
+   var res = amigos.split(",");
+
+    
+   // location.reload()
+    const formu = document.getElementById('formulario');
+    console.log(formu.busca.value)
+    usuarioEnvio=formu.busca.value;  
+    let url = '/buscarAmigos'
+    let datos = {
+        "busca" : formu.busca.value,
+        
+   
+    }
+
+ const response = await fetch(url, {
+    method: 'POST', 
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(datos)
+     // body data type must match "Content-Type" header
+  }).then(response => response.json())
+    .then(json => {
+      //console.log(json.amigosDB[0].nombre)
+        let amigos=json.amigosDB._doc
+        var i=0
+       json.amigosDB.forEach( element => {
+          if(!res.includes(element.nombre)){
+              console.log(res + "************************")
+            //console.log(element.nombre) 
+            var newDiv = document.createElement("div")
+            newDiv.setAttribute("id", element.nombre);
+
+            newDiv.innerHTML=`<h1>${element.nombre}</h1> <input type="button" id = "${element._id}"  value= "Seguir" onclick=seguir("${element._id}")> `
+            //<a href="/seguir/${element.nombre}" target="_blank" title="amigos">seguir</a>`
+  
+            document.getElementById("div1").appendChild(newDiv);
+          }
+        })
+    
+  
+}).catch(err => {return console.log(err)});;
+
+}
+
+
+
+function seguir(id){
+
+        
+
+                             
+  var token1 = localStorage.getItem('token');
+  if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+        let h = new Headers();
+        h.append('authorization', `${token1}`);
+        let req = new Request(`/seguir/${id}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: h,
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            //body: JSON.stringify(id)
+        });
+
+
+
+       fetch(req)
+            .then(resp => resp.text())
+            .then(data => {
+
+              
+              if(data.ok=true){
+
+                
+                document.getElementById(`${id}`).value="siguiendo"  //el nombre es el id que hay que borrar
+                
+              }
+            });
+          
+
+  }
+
+}
+
+function noSeguir(id,nombre){
+
+                             
+  var token1 = localStorage.getItem('token');
+  if (token1 != null) { //este bloque realiza la petición si se envió token con su cabecera del authoritation: token
+
+        let h = new Headers();
+        h.append('authorization', `${token1}`);
+        let req = new Request(`/noSeguir/${id}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: h,
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            //body: JSON.stringify(id)
+        });
+
+
+       fetch(req)
+            .then(resp => resp.text())
+            .then(data => {
+              
+              if(data.ok=true){
+
+                document.getElementById(`${nombre}`).value="No siguiendo"  //el nombre es el id que hay que borrar
+                
+
+              }
+            });
+          
+
+  }
+
+}
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+   <script src="/assets/js/bootstrap.bundle.min.js"></script>
+</body></html>

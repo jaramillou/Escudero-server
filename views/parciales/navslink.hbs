@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark">
+    <div class="container-fluid">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                {{#if letrero}}
+                <a class="navbar-brand" href="javascript:muro()"><h2><font face="Comic Sans MS,Arial,Menlo Bold"><em><strong>{{ letrero }}</strong></em></font></h2></a>   
+               <!-- <a class="navbar-brand" href="javascript:muro()"><img src='/assets/img/escudero.png' width="120" height="60" alt="user image" /</a> -->
+                {{else}}
+                <a class="navbar-brand" href="javascript:muro()"><h1>&lt;</h1></a>
+                {{/if}}
+            </li>
+           
+        </ul>
+    
+         <div class="ml-auto order-1">
+       
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+
+         <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+              <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        
+                        <a class="nav-link"  href="javascript:amigos()"><img src='/assets/img/amigos.png' width="40" height="40" alt="user image" /></a>
+                
+                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:cerrar()"><img src='/assets/img/salir.png' width="40" height="40" alt="user image" /></a>
+                     </li>
+              </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<!--
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+    <a class="navbar-brand abs" href="#">Navbar 1</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="javascript:muro()"><h1>&lt;</h1></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link"  href="javascript:amigos()"><h1>Amigos</h1></a>
+                </li>
+                
+          
+            </ul>
+            <ul class="nav justify-content-end"> 
+                <li class="nav-item active">
+                    <a class="nav-link" href="javascript:cerrar()"><h1>Cerrar</h1></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    -->
