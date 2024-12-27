@@ -74,6 +74,9 @@ let usuarioSchema = new Schema({
     velMax: {
         type: [String]
     },
+    vel2Seg: {
+        type: [String]
+    },
     amigos: {
         type: [String]
     },

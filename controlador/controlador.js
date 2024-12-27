@@ -77,7 +77,9 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
         let alt = JSON.stringify(this.body.altitud)
         let velMax = this.body.velMax
 
-       let vel2seg = velocidad2Segundos(vel)
+        let vel2seg = velocidad2Segundos(vel)
+        let vel10s = velocidad10Segundos(vel)
+        let vel500m = velocidad500(vel)
 
         console.log(req.usuario.nombre + " este usuario con hora enviado desde IOS: " + (this.body.hora))
 
@@ -103,6 +105,7 @@ app.post('/envio', verificatoken, async(req, res) => { // añade nueva cordenada
                 direccion: dir,
                 altitud: alt,
                 velMax: vMax.toFixed(2),
+                vel2Seg: vel2seg,
                 hora: this.body.hora,
                 hora_fin: this.body.hora_fin,
                 distancia: this.body.distancia.toFixed(1),
